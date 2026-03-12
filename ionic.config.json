@@ -1,0 +1,7 @@
+{
+  "name": "Gradu",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
