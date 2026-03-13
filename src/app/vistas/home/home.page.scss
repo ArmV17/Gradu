@@ -1,0 +1,263 @@
+/* home.page.scss */
+
+.main-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  background-image: url("/assets/img/estudio.png"); 
+  background-size: cover;
+  background-position: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 23, 57, 0.45); 
+    z-index: 1;
+  }
+}
+
+.desktop-layout, .mobile-layout {
+  position: relative;
+  z-index: 10; 
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+
+/* --- 🖥️ DISEÑO PARA PC --- */
+.desktop-layout {
+  display: flex;
+
+  // Franja borrosa izquierda
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 45%; 
+    height: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 2;
+  }
+
+  .top-nav {
+    position: absolute;
+    top: 40px; 
+    width: 45%; // Limitamos el ancho al área borrosa
+    padding: 0 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 20;
+
+    .logo-text {
+        letter-spacing: 5px;
+        font-weight: bold;
+        color: var(--gradu-cream, #E3C39D);
+    }
+
+    .nav-links {
+      a { 
+        margin-left: 20px; 
+        font-size: 0.75rem; 
+        text-decoration: none; 
+        // Color igual al logo (crema)
+        color: var(--gradu-cream, #E3C39D); 
+        font-weight: 600;
+        letter-spacing: 2px;
+        transition: opacity 0.3s;
+        &:hover { opacity: 0.7; }
+      }
+    }
+  }
+
+  .left-side {
+    position: relative;
+    z-index: 10;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 80px;
+
+    .main-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      span { color: var(--gradu-taupe, #A68B68); }
+    }
+    .description {
+      font-size: 1rem;
+      opacity: 0.8;
+      color: var(--gradu-grey-light, #CDD5DB);
+    }
+  }
+
+  .right-side {
+    width: 55%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+
+    .login-box-pc {
+      width: 400px;
+      padding: 40px;
+      background: transparent;
+
+      .login-header {
+        font-size: 1.2rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 35px;
+        color: var(--gradu-cream);
+        text-align: center;
+      }
+
+      .input-item {
+        // EFECTO DIFUMINADO EN INPUTS
+        --background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        
+        --color: white;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        
+        ion-input {
+          --padding-start: 15px;
+          font-size: 0.9rem;
+        }
+      }
+
+      .btn-pc {
+        --border-color: var(--gradu-cream);
+        --color: var(--gradu-cream);
+        --border-width: 2px;
+        margin-top: 25px;
+        font-weight: bold;
+        letter-spacing: 3px;
+        height: 50px;
+        transition: 0.3s;
+        &:hover {
+          --background: var(--gradu-cream);
+          --color: var(--gradu-navy);
+        }
+      }
+    }
+  }
+}
+
+/* --- 📱 DISEÑO PARA MÓVIL (Igual que PC pero vertical) --- */
+.mobile-layout {
+  display: flex;
+  flex-direction: column; // Layout vertical
+  height: 100%;
+
+  // PARTE SUPERIOR BORROSA (MARCA)
+  .mobile-brand-zone {
+    flex: 4; // Toma el 40% del alto aprox
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    
+    // Efecto Glassmorphism Superior
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 5;
+
+    .logo-mobile { 
+      letter-spacing: 10px; 
+      font-size: 0.8rem; 
+      color: var(--gradu-grey-blue, #A4B5C4); 
+      text-transform: uppercase;
+    }
+    .welcome-text { 
+      font-size: 3.5rem; 
+      margin: 5px 0; 
+      font-weight: 600; 
+      letter-spacing: -2px;
+      color: white;
+    }
+    .subtitle { 
+      font-style: italic; 
+      color: var(--gradu-cream, #E3C39D);
+      font-size: 1rem;
+    }
+  }
+
+  // PARTE INFERIOR NÍTIDA (LOGIN)
+  .mobile-login-zone {
+    flex: 6; // Toma el resto del espacio
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 40px 30px;
+    z-index: 5;
+
+    .login-form-mobile {
+      width: 100%;
+      
+      ion-item.custom-input {
+        // Inputs difuminados igual que en PC
+        --background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        
+        --color: white;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        
+        ion-input {
+          --placeholder-color: rgba(255, 255, 255, 0.5);
+          --padding-start: 15px;
+          font-size: 0.9rem;
+        }
+      }
+
+      .forgot { 
+        font-size: 0.7rem; 
+        opacity: 0.6; 
+        text-transform: uppercase; 
+        letter-spacing: 2px;
+        text-align: center;
+        margin: 10px 0 30px 0;
+      }
+
+      .btn-mobile {
+        --border-color: var(--gradu-cream);
+        --color: var(--gradu-cream);
+        --border-width: 2px;
+        font-weight: bold;
+        letter-spacing: 3px;
+        height: 50px;
+      }
+    }
+  }
+}
+
+/* --- ANIMACIONES --- */
+.left-side, .right-side, .mobile-content {
+  animation: entrance 1s ease-out both;
+}
+
+@keyframes entrance {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- CONTROL RESPONSIVO --- */
+@media (max-width: 768px) { .desktop-layout { display: none !important; } }
+@media (min-width: 769px) { .mobile-layout { display: none !important; } }

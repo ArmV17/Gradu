@@ -1,0 +1,61 @@
+<ion-content [fullscreen]="true">
+  <div class="main-wrapper">
+    
+    <div class="desktop-layout">
+      <nav class="top-nav">
+        <span class="logo-text">ESTUDIO</span>
+        <div class="nav-links">
+          <a>CONTACTO</a>
+          <a>FAQ</a>
+        </div>
+      </nav>
+
+      <div class="left-side">
+        <h1 class="main-title">ESTUDIO <span>GRADU</span></h1>
+        <p class="description">Gestión logística para eventos académicos de alta gama.</p>
+      </div>
+
+      <div class="right-side">
+        <div class="login-box-pc">
+          <h3 class="login-header">Ingresar</h3>
+          <ion-item lines="none" class="input-item">
+            <ion-input label="No. Empleado" label-placement="floating" [(ngModel)]="numEmpleado"></ion-input>
+          </ion-item>
+          <ion-item lines="none" class="input-item">
+            <ion-input label="Password" type="password" label-placement="floating" [(ngModel)]="password"></ion-input>
+          </ion-item>
+          <ion-button (click)="login()" expand="block" fill="outline" class="btn-pc">INGRESAR</ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-layout">
+  
+      <div class="mobile-brand-zone">
+        <h2 class="logo-mobile">ESTUDIO</h2>
+        <h1 class="welcome-text">Ready</h1>
+        <p class="subtitle">¿para una nueva graduación?</p>
+      </div>
+      
+      <div class="mobile-login-zone">
+        <div class="login-form-mobile">
+          <ion-item lines="none" class="custom-input">
+            <ion-input placeholder="NÚMERO DE EMPLEADO" [(ngModel)]="numEmpleado"></ion-input>
+          </ion-item>
+          
+          <ion-item lines="none" class="custom-input">
+            <ion-input placeholder="CONTRASEÑA" type="password" [(ngModel)]="password"></ion-input>
+          </ion-item>
+          
+          <p class="forgot">¿Olvidaste tu contraseña?</p>
+
+          <ion-button (click)="login()" expand="block" fill="outline" class="btn-mobile">
+            INGRESAR
+          </ion-button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</ion-content>
