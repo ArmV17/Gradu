@@ -16,12 +16,15 @@ import {
 } from '@angular/fire/firestore';
 
 // RxJS
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 
 // Librerías Externas
 import * as XLSX from 'xlsx';
 import * as CryptoJS from 'crypto-js';
+
+// IMPORTANTE: Traemos la llave desde el archivo central de configuración
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-medicion',
@@ -36,8 +39,8 @@ export class MedicionPage implements OnInit {
   private toastCtrl = inject(ToastController);
   private loadingCtrl = inject(LoadingController);
 
-  // LLAVE MAESTRA DE CIFRADO (No la cambies o perderás acceso a datos anteriores)
-  private readonly secretKey = 'Gradu_Secret_Key_2026_Secure';
+  // Usamos la llave maestra centralizada para que coincida con el Home
+  private readonly secretKey = environment.cryptoKey;
 
   // Estado de la interfaz
   camposBloqueados: boolean = false;
@@ -63,21 +66,18 @@ export class MedicionPage implements OnInit {
     const ref = collection(this.firestore, 'medidas');
     const q = query(ref, orderBy('fechaRegistro', 'desc'));
     
-    // Obtenemos los datos y los desciframos en tiempo real para la lista
     this.mediciones$ = collectionData(q, { idField: 'id' }).pipe(
       map(meds => meds.map(m => ({
         ...m,
-        // Desciframos solo los campos sensibles
+        // Desciframos los campos usando la llave del environment
         nombreCompleto: this.decrypt(m['nombreCompleto'] || ''),
         escuela: this.decrypt(m['escuela'] || ''),
         profesor: this.decrypt(m['profesor'] || ''),
-        // Los demás se quedan igual
         grado: m['grado'],
         turno: m['turno'],
         tallaToga: m['tallaToga'],
         tallaBirrete: m['tallaBirrete']
       }))),
-      // Aplicamos el filtro de búsqueda sobre los datos ya descifrados
       switchMap(medsDescifrados => this.filtroBusqueda$.pipe(
         map(filtro => medsDescifrados.filter(m => 
           m.nombreCompleto.toLowerCase().includes(filtro.toLowerCase()) ||
@@ -95,6 +95,7 @@ export class MedicionPage implements OnInit {
   
   private encrypt(text: string): string {
     if (!text) return '';
+    // Cifrado con la llave central
     return CryptoJS.AES.encrypt(text.trim(), this.secretKey).toString();
   }
 
@@ -132,7 +133,6 @@ export class MedicionPage implements OnInit {
     await loading.present();
 
     try {
-      // Guardamos en Firebase con los datos sensibles ocultos
       await addDoc(collection(this.firestore, 'medidas'), {
         ...this.alumno,
         nombreCompleto: this.encrypt(this.alumno.nombreCompleto),
@@ -144,7 +144,6 @@ export class MedicionPage implements OnInit {
       await loading.dismiss();
       this.presentToast('Registro seguro guardado', 'success');
       
-      // Limpieza: Solo nombre y notas (mantenemos escuela/grupo si están bloqueados)
       this.alumno.nombreCompleto = '';
       this.alumno.notas = '';
       
@@ -172,7 +171,6 @@ export class MedicionPage implements OnInit {
 
         for (const f of json) {
           await addDoc(ref, {
-            // Ciframos cada registro antes de subirlo
             nombreCompleto: this.encrypt(f['Nombre'] || f['nombreCompleto'] || 'Sin Nombre'),
             escuela: this.encrypt(f['Escuela'] || f['escuela'] || this.alumno.escuela),
             profesor: this.encrypt(f['Profesor'] || f['profesor'] || this.alumno.profesor),

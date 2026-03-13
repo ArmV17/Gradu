@@ -1,9 +1,9 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar class="custom-toolbar">
     <ion-title>Estudio Gradu</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="salir()" color="danger">
-        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      <ion-button (click)="irAMedicion()" class="btn-nueva">
+        NUEVA MEDIDA
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -11,43 +11,25 @@
 
 <ion-content class="ion-padding gray-bg">
   <div class="responsive-container">
-    
-    <div class="welcome-header">
-      <h1>Panel de Control</h1>
-      <p>Selecciona una opción para comenzar</p>
+    <div class="header-text">
+      <h1 class="main-title">Eventos por Escuela</h1>
+      <p class="sub-title">Escuelas con registros activos</p>
     </div>
 
-    <ion-grid>
+    <ion-grid class="ion-no-padding">
       <ion-row>
-        <ion-col size="12" size-md="6">
-          <ion-card (click)="navegar('medicion')" class="menu-card">
-            <ion-card-content>
-              <div class="icon-box blue">
-                <ion-icon name="ruler-outline"></ion-icon>
-              </div>
-              <div class="text-box">
-                <h2>Registro de Medidas</h2>
-                <p>Captura tallas de togas, birretes y datos de alumnos.</p>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-
-        <ion-col size="12" size-md="6">
-          <ion-card (click)="navegar('estadisticas')" class="menu-card">
-            <ion-card-content>
-              <div class="icon-box gold">
-                <ion-icon name="bar-chart-outline"></ion-icon>
-              </div>
-              <div class="text-box">
-                <h2>Estadísticas</h2>
-                <p>Consulta totales de producción por talla y escuela.</p>
-              </div>
-            </ion-card-content>
-          </ion-card>
+        <ion-col size="12" size-md="6" *ngFor="let escuela of (escuelas$ | async)">
+          <div class="escuela-card-dark">
+            <div class="card-icon">
+              <ion-icon name="business"></ion-icon>
+            </div>
+            <div class="card-info">
+              <h2 class="escuela-name">{{ escuela }}</h2>
+              <p class="escuela-action">Ver estadísticas y registros</p>
+            </div>
+          </div>
         </ion-col>
       </ion-row>
     </ion-grid>
-
   </div>
 </ion-content>

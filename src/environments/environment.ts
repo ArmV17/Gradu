@@ -8,5 +8,6 @@ export const environment = {
     messagingSenderId: "438942827009",
     appId: "1:438942827009:web:0298ce011c3279d5263600",
     measurementId: "G-LL9J5SNPDE"
-  }
+  },
+  cryptoKey: 'Gradu_Secret_Key_2026_Secure'
 };
