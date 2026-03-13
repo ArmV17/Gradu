@@ -1,97 +1,204 @@
-ion-toolbar {
-  --background: #071739; // Tu azul marino
-  --color: white;
+/* --- CONFIGURACIÓN GENERAL --- */
+.gray-bg {
+  --background: #f8f9fa;
 }
 
+.responsive-container {
+  max-width: 950px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* --- TARJETA DE FORMULARIO --- */
 .form-card {
   background: white;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  padding: clamp(15px, 3vw, 30px);
+  border-radius: 25px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  margin-bottom: 25px;
+
+  .header-with-lock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .section-title {
+      margin-bottom: 0;
+    }
+  }
 }
 
+/* --- ESTILO DE TEXTO MINIMALISTA (BLOQUEAR/DESBLOQUEAR) --- */
+.header-with-lock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.text-lock-container {
+  cursor: pointer;
+  padding: 10px;
+  transition: opacity 0.2s ease;
+
+  &:active {
+    opacity: 0.5;
+  }
+}
+
+.lock-action-text {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #666666;
+  transition: all 0.3s ease;
+  position: relative;
+
+  /* Estilo cuando está bloqueado (DESBLOQUEAR) */
+  &.is-locked {
+    color: #071739;
+    text-decoration: underline;
+  }
+
+  &:hover {
+    color: #000000;
+  }
+}
+
+ion-item[disabled] {
+  --background: #f4f5f8;
+  opacity: 0.8;
+}
+
+/* --- ALINEACIÓN TURNO EN PC (NUEVO) --- */
+.turno-col {
+  padding-left: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 12px;
+}
+
+.turno-label {
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+}
+
+/* --- TÍTULOS Y ETIQUETAS --- */
 .section-title {
   color: #071739;
   font-weight: 800;
-  margin-bottom: 25px;
-  border-left: 4px solid #E3C39D; // Tu crema
-  padding-left: 15px;
+  border-left: 4px solid #E3C39D;
+  padding-left: 12px;
+  font-size: 1.2rem;
 }
 
 .label-talla {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #666;
-  margin: 25px 0 10px 5px;
+  margin: 15px 0 10px 5px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
+/* --- INPUTS Y BUSCADOR (LETRAS NEGRAS) --- */
+.custom-input {
+  --background: #f9f9f9;
+  --border-radius: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #f0f0f0;
+
+  ion-label {
+    color: #071739 !important;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  ion-input, ion-textarea {
+    --color: #000000 !important;
+    color: #000000 !important;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+
+  &[disabled="true"] {
+    opacity: 0.8;
+    --background: #f4f5f8;
+    ion-input { --color: #444 !important; }
+  }
+}
+
+ion-searchbar {
+  --background: #f4f5f8;
+  --border-radius: 15px;
+  margin: 15px 0;
+  --color: #000000 !important; // Texto negro en búsqueda
+  
+  input.searchbar-input {
+    color: #000000 !important;
+  }
+}
+
+/* --- SELECTORES (SEGMENTS) --- */
 .talla-segment {
   --background: #f4f5f8;
+  border-radius: 12px;
+  
   ion-segment-button {
     --color: #071739;
     --color-checked: white;
     --indicator-color: #071739;
     font-weight: bold;
+    min-height: 45px;
   }
 }
 
-.custom-input {
-  --background: #f9f9f9;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  --padding-start: 15px;
-  
-  ion-label { color: #071739 !important; font-weight: bold; }
-}
-
-.margin-top { margin-top: 20px; }
-
+/* --- BOTÓN REGISTRAR (LETRAS BLANCAS) --- */
 .btn-guardar {
-  margin-top: 40px;
+  margin-top: 30px;
   --background: #071739;
+  --color: #ffffff !important;
+  color: #ffffff !important;
   --border-radius: 15px;
   height: 55px;
-  font-weight: bold;
-  letter-spacing: 1px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 15px rgba(7, 23, 57, 0.2);
+  text-transform: uppercase;
 }
 
-/* Agrega esto a tu archivo scss anterior */
-
-.list-container {
-  margin-top: 30px;
-  
-  .list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    
-    .section-title { margin-bottom: 0; }
-    ion-badge { border-radius: 8px; padding: 6px 10px; }
-  }
-}
-
-.custom-search {
-  --background: #f4f5f8;
-  --border-radius: 12px;
-  padding: 0;
-  margin-bottom: 15px;
-}
-
+/* --- LISTADO --- */
 .alumno-item {
   --background: white;
   margin-bottom: 10px;
-  border-radius: 15px;
+  border-radius: 18px;
   border: 1px solid #f0f0f0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 
   h2 {
     font-weight: 700;
     color: #071739;
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
-  p { font-size: 0.85rem; }
-  strong { color: #A68B68; } // Color Taupe para las tallas
+
+  p {
+    font-size: 0.85rem;
+    color: #666;
+    strong { color: #A68B68; }
+  }
+}
+
+/* --- AJUSTES RESPONSIVE --- */
+@media (max-width: 768px) {
+  .turno-col {
+    padding-left: 0;
+    margin-top: 10px;
+  }
+
+  .form-card {
+    border-radius: 0 0 25px 25px;
+    margin-top: -16px;
+  }
 }
