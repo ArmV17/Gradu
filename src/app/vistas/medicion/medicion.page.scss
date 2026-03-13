@@ -1,0 +1,97 @@
+ion-toolbar {
+  --background: #071739; // Tu azul marino
+  --color: white;
+}
+
+.form-card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.section-title {
+  color: #071739;
+  font-weight: 800;
+  margin-bottom: 25px;
+  border-left: 4px solid #E3C39D; // Tu crema
+  padding-left: 15px;
+}
+
+.label-talla {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
+  margin: 25px 0 10px 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.talla-segment {
+  --background: #f4f5f8;
+  ion-segment-button {
+    --color: #071739;
+    --color-checked: white;
+    --indicator-color: #071739;
+    font-weight: bold;
+  }
+}
+
+.custom-input {
+  --background: #f9f9f9;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  --padding-start: 15px;
+  
+  ion-label { color: #071739 !important; font-weight: bold; }
+}
+
+.margin-top { margin-top: 20px; }
+
+.btn-guardar {
+  margin-top: 40px;
+  --background: #071739;
+  --border-radius: 15px;
+  height: 55px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Agrega esto a tu archivo scss anterior */
+
+.list-container {
+  margin-top: 30px;
+  
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    
+    .section-title { margin-bottom: 0; }
+    ion-badge { border-radius: 8px; padding: 6px 10px; }
+  }
+}
+
+.custom-search {
+  --background: #f4f5f8;
+  --border-radius: 12px;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+.alumno-item {
+  --background: white;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+
+  h2 {
+    font-weight: 700;
+    color: #071739;
+    font-size: 1rem;
+  }
+  p { font-size: 0.85rem; }
+  strong { color: #A68B68; } // Color Taupe para las tallas
+}
