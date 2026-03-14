@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="custom-toolbar">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button defaultHref="/home" color="light"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ nombreEscuela }}</ion-title>
   </ion-toolbar>
@@ -12,15 +12,12 @@
 
     <div class="header-text">
       <h1 class="main-title">Logística del Grupo</h1>
-      <p class="sub-title">Información del evento asignado</p>
+      <p class="sub-title">{{ isPC ? 'Panel de Administración' : 'Tu evento asignado' }}</p>
     </div>
 
     <div *ngFor="let grupo of grupos" class="escuela-card-dark">
       
       <div class="card-header">
-        <div class="card-icon">
-          <ion-icon name="people-circle"></ion-icon>
-        </div>
         <div class="info-box">
           <h2 class="escuela-name">Prof: {{ grupo.profesor }}</h2>
           <p class="tap-hint">{{ grupo.grado }} • {{ grupo.turno }}</p>
@@ -29,58 +26,80 @@
 
       <div class="divider"></div>
 
+      <div *ngIf="!isPC" class="staff-view">
+        <div class="info-grid">
+          <div class="info-row">
+            <span class="label">Día:</span>
+            <span class="value">{{ grupo.fechaEvento | date:"EEEE, d 'de' MMMM":"":"es" }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Hora:</span>
+            <span class="value">{{ grupo.hora || '00:00' }} Hrs</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Lugar:</span>
+            <span class="value">{{ grupo.lugar || 'Pendiente' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Ubicación:</span>
+            <span class="value">{{ grupo.ubicacion || 'Pendiente' }}</span>
+          </div>
+        </div>
+      </div>
+
       <div *ngIf="isPC" class="admin-only">
         <ion-list lines="none" class="dark-list">
           <ion-item class="input-dark">
             <ion-label position="stacked">LUGAR / SALÓN</ion-label>
-            <ion-input [(ngModel)]="grupo.lugar"></ion-input>
+            <ion-input [(ngModel)]="grupo.lugar" placeholder="Ej. Villa Ferré"></ion-input>
           </ion-item>
-          
           <ion-item class="input-dark">
             <ion-label position="stacked">DIRECCIÓN</ion-label>
             <ion-input [(ngModel)]="grupo.ubicacion"></ion-input>
           </ion-item>
-
           <div class="flex-row">
+            <ion-item class="input-dark flex-item">
+              <ion-label position="stacked">FECHA</ion-label>
+              <ion-input type="date" [(ngModel)]="grupo.fechaEvento"></ion-input>
+            </ion-item>
             <ion-item class="input-dark flex-item">
               <ion-label position="stacked">HORA</ion-label>
               <ion-input type="time" [(ngModel)]="grupo.hora"></ion-input>
             </ion-item>
-
-            <ion-item class="input-dark flex-item">
-              <ion-label position="stacked">ID EMPLEADO</ion-label>
-              <ion-input [(ngModel)]="grupo.empleado" placeholder="0001"></ion-input>
-            </ion-item>
           </div>
+          <ion-item class="input-dark">
+            <ion-label position="stacked">ID EMPLEADO ASIGNADO</ion-label>
+            <ion-input [(ngModel)]="grupo.empleado"></ion-input>
+          </ion-item>
         </ion-list>
-
         <ion-button expand="block" color="primary" class="btn-save" (click)="guardarLogistica(grupo)">
-          GUARDAR LOGÍSTICA
+          GUARDAR CAMBIOS
         </ion-button>
       </div>
 
-      <div *ngIf="!isPC" class="view-only">
-        <div class="info-item">
-          <ion-icon name="location-outline"></ion-icon>
-          <span><strong>Lugar:</strong> {{ grupo.lugar || 'Pendiente' }}</span>
-        </div>
-        <div class="info-row">
-          <ion-icon name="map-outline"></ion-icon>
-          <span><strong>Dirección:</strong> {{ grupo.ubicacion || 'Pendiente' }}</span>
-        </div>
-        <div class="info-item">
-          <ion-icon name="time-outline"></ion-icon>
-          <span><strong>Hora:</strong> {{ grupo.hora || '--:--' }}</span>
-        </div>
-        </div>
-
       <ion-accordion-group class="ion-margin-top">
-        <ion-accordion value="alumnos">
-          <ion-item slot="header" color="dark">
+        <ion-accordion value="alumnos" class="custom-accordion">
+          <ion-item slot="header">
             <ion-label>Lista de Alumnos ({{ grupo.alumnos.length }})</ion-label>
           </ion-item>
-          <div class="ion-padding alumnos-list" slot="content">
-            <p *ngFor="let alumno of grupo.alumnos">• {{ alumno.nombreDesc }}</p>
+          
+          <div slot="content" class="alumnos-list-container">
+            <ion-list lines="full" class="inner-list">
+              <ion-item *ngFor="let al of grupo.alumnos" class="alumno-item">
+                <ion-label>
+                  <h3 class="alumno-name">{{ al.nombre }}</h3>
+                  <div class="alumno-data-container">
+                    <div class="tallas-row">
+                      <span class="talla-tag">Toga: <strong class="badge-talla">{{ al.toga }}</strong></span>
+                      <span class="talla-tag">Birrete: <strong class="badge-talla">{{ al.birrete }}</strong></span>
+                    </div>
+                    <div class="alumno-nota" *ngIf="al.nota">
+                      <span>{{ al.nota }}</span>
+                    </div>
+                  </div>
+                </ion-label>
+              </ion-item>
+            </ion-list>
           </div>
         </ion-accordion>
       </ion-accordion-group>

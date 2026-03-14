@@ -1,68 +1,86 @@
-/* Estilos específicos para Detalle */
+/* --- BASE --- */
 .gray-bg { --background: #fdfdfd; }
+.custom-toolbar { --background: #1e1e1e; --color: white; }
 
-.custom-toolbar {
-  --background: #1e1e1e;
-  --color: white;
+.header-text {
+  margin: 15px 0;
+  .main-title { color: #071739; font-weight: 900; font-size: 1.8rem; margin: 0; }
+  .sub-title { color: #888; font-size: 0.85rem; }
 }
 
+/* --- TARJETA --- */
 .escuela-card-dark {
-  background: #1e1e1e;
-  border-radius: 25px;
-  padding: 22px;
-  margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  background: #1e1e1e; border-radius: 25px; padding: 22px; margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 
   .card-header {
-    display: flex;
-    align-items: center;
+    display: flex; align-items: center;
     .card-icon {
-      background: #3880ff;
-      width: 48px; height: 48px;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      margin-right: 15px;
+      background: #3880ff; width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; margin-right: 15px;
       ion-icon { color: white; font-size: 1.5rem; }
     }
-    .escuela-name { color: white; font-weight: 800; font-size: 1.2rem; margin: 0; }
-    .tap-hint { color: #888; font-size: 0.85rem; margin-top: 3px; }
+    .escuela-name { color: white; font-weight: 800; font-size: 1.3rem; margin: 0; }
+    .tap-hint { color: #888; font-size: 0.85rem; }
   }
 }
 
 .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 18px 0; }
 
-/* VISTA STAFF CELULAR */
-.staff-view {
-  .info-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-    color: #ccc;
-    ion-icon { color: #3880ff; margin-right: 12px; font-size: 1.2rem; }
-    span { font-size: 0.95rem; text-transform: capitalize; } // Capitaliza el día
-    strong { color: white; margin-right: 5px; }
+/* --- GRID DE INFORMACIÓN (Alineación corregida) --- */
+.info-grid {
+  padding: 5px;
+  .info-row {
+    display: flex; margin-bottom: 12px; font-size: 1.1rem;
+    .label { width: 100px; font-weight: bold; color: white; }
+    .value { flex: 1; color: #ccc; text-transform: capitalize; }
   }
 }
 
-/* INPUTS ADMIN PC */
-.input-dark {
-  --background: #2a2a2a;
-  --color: white;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  ion-label { color: #3880ff !important; font-weight: bold; font-size: 0.75rem; }
-}
+/* --- ACORDEÓN (Estilo oscuro forzado) --- */
+.custom-accordion {
+  background: #2a2a2a; border-radius: 15px; overflow: hidden; margin-top: 10px;
+  --box-shadow: none;
 
-.flex-row { display: flex; gap: 10px; .flex-item { flex: 1; } }
-
-/* ACORDEÓN DARK */
-.dark-accordion {
-  background: #2a2a2a;
-  border-radius: 12px;
-  ion-item { --background: #2a2a2a; --color: white; font-weight: bold; }
-  .alumnos-content {
-    background: #1e1e1e;
-    color: #aaa;
-    p { margin: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+  ion-item {
+    --background: #2a2a2a; --color: #3880ff; font-weight: 700;
+    --border-style: none;
   }
 }
+
+/* --- LISTA DE ALUMNOS --- */
+.alumnos-list-container {
+  background: #1e1e1e;
+  .alumno-item {
+    --background: transparent; --color: white; --border-color: rgba(255, 255, 255, 0.05);
+    .alumno-name { color: white; font-weight: 700; font-size: 1.05rem; margin-top: 10px; }
+  }
+}
+
+.alumno-data-container {
+  display: flex; flex-direction: column; margin-top: 4px; margin-bottom: 12px;
+  .tallas-row {
+    display: flex; gap: 15px; margin-bottom: 6px;
+    .talla-tag {
+      color: #888; font-size: 0.9rem;
+      .badge-talla { background: #222e44; color: #3880ff; padding: 2px 8px; border-radius: 6px; }
+    }
+  }
+  .alumno-nota {
+    color: #ffd700; font-style: italic; font-size: 0.95rem; font-weight: 500;
+    margin-left: 15px; // Sangría igual a la de tu captura
+  }
+}
+
+/* --- RESPONSIVIDAD --- */
+@media (min-width: 769px) {
+  .admin-only { display: block; }
+  .alumno-data-container {
+    flex-direction: row; align-items: center;
+    .alumno-nota { margin-top: 0; margin-left: 20px; padding-left: 15px; border-left: 1px solid #444; }
+  }
+  .input-dark { --background: #2a2a2a; --color: white; border-radius: 12px; margin-bottom: 10px; ion-label { color: #3880ff !important; font-weight: bold; } }
+  .flex-row { display: flex; gap: 10px; .flex-item { flex: 1; } }
+}
+
+@media (max-width: 768px) { .admin-only { display: none !important; } }

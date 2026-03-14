@@ -1,195 +1,83 @@
-/* --- CONFIGURACIÓN DE FONDO Y CONTENEDOR --- */
-.gray-bg {
-  --background: #fdfdfd; // Fondo claro para resaltar las tarjetas oscuras
-}
+/* --- CONFIGURACIÓN BASE --- */
+.gray-bg { --background: #fdfdfd; }
+.responsive-container { max-width: 1200px; margin: 0 auto; }
 
-.responsive-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 10px;
-}
-
-/* --- TOOLBAR ESTILO DARK --- */
+/* --- TOOLBAR --- */
 .custom-toolbar {
   --background: #1e1e1e;
   --color: #ffffff;
-  --border-width: 0;
-  
-  ion-title {
-    font-weight: 800;
-    letter-spacing: 0.5px;
-  }
+  ion-title { font-weight: 800; }
 }
 
-.btn-nueva {
-  --color: #3880ff;
-  font-weight: 700;
-  font-size: 0.8rem;
+/* --- GRID DE TARJETAS (2 Columnas en PC) --- */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  @media (min-width: 992px) { grid-template-columns: 1fr 1fr; }
 }
 
-/* --- TEXTOS DE ENCABEZADO --- */
-.header-text {
-  margin: 35px 0 25px 10px;
-  
-  .main-title {
-    color: #071739;
-    font-weight: 900;
-    font-size: 2.2rem;
-    margin: 0;
-  }
-  
-  .sub-title {
-    color: #888;
-    font-size: 1rem;
-    margin-top: 5px;
-  }
-}
-
-/* --- TARJETA OSCURA DE ESCUELA --- */
+/* --- TARJETA OSCURA --- */
 .escuela-card-dark {
   background: #1e1e1e;
   border-radius: 25px;
   padding: 24px;
-  margin-bottom: 18px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+  cursor: default; // Por defecto no es clickeable
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  /* SOLO EN PC SE VE COMO BOTÓN */
+  &.clickable:hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    border-color: rgba(56, 128, 255, 0.4);
   }
 
-  /* Encabezado de la tarjeta */
   .card-header {
     display: flex;
     align-items: center;
-    
     .card-icon {
-      background: #3880ff; // Azul distintivo de Gradu
-      width: 50px;
-      height: 50px;
+      background: #3880ff;
+      width: 50px; height: 50px;
       border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       margin-right: 18px;
-
-      ion-icon {
-        font-size: 1.6rem;
-        color: #ffffff;
-      }
+      ion-icon { font-size: 1.6rem; color: #ffffff; }
     }
-
     .info-box {
-      .escuela-name {
-        color: #ffffff;
-        font-weight: 800;
-        font-size: 1.4rem;
-        margin: 0;
-      }
-      .tap-hint {
-        color: #3880ff;
-        font-size: 0.8rem;
-        font-weight: 600;
-        margin-top: 4px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
+      .escuela-name { color: #ffffff; font-weight: 800; font-size: 1.4rem; margin: 0; }
+      .tap-hint { color: #3880ff; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
     }
   }
 }
 
-/* --- SEGURIDAD: OCULTAR EDICIÓN POR TAMAÑO DE PANTALLA --- */
-
-/* Vista exclusiva para Celulares (Mobile) */
-@media (max-width: 768px) {
-  .admin-only {
-    display: none !important; // Elimina físicamente los inputs de edición
-  }
-  
-  .view-only {
-    display: block !important;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    
-    p {
-      color: #cbd5e1;
-      font-size: 0.95rem;
-      margin: 8px 0;
-      display: flex;
-      align-items: center;
-      
-      strong {
-        color: #ffffff;
-        margin-right: 6px;
-      }
-    }
-
-    ion-badge {
-      margin-top: 10px;
-      --padding-start: 12px;
-      --padding-end: 12px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-  }
-
-  .main-title {
-    font-size: 1.8rem !important;
-  }
-}
-
-/* Vista exclusiva para Administradores (PC) */
-@media (min-width: 769px) {
-  .view-only {
-    display: none; // No es necesario el resumen si tienes los inputs de edición
-  }
-
-  .admin-only {
-    display: block;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-
-    .input-dark {
-      --background: #2a2a2a;
-      --color: white;
-      margin-bottom: 12px;
-      border-radius: 12px;
-      --padding-start: 12px;
-      
-      ion-label {
-        color: #3880ff !important;
-        font-weight: 700;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-      }
-      
-      ion-input {
-        --color: #ffffff;
-        font-size: 0.95rem;
-      }
-    }
-  }
-}
-
-/* --- ESTADOS VACÍOS --- */
-.empty-state {
-  text-align: center;
-  margin-top: 100px;
-  color: #94a3b8;
-  
-  ion-icon {
-    font-size: 5rem;
-    opacity: 0.2;
-    margin-bottom: 15px;
-  }
-  
-  p {
+/* --- TABLA DE DATOS ALINEADA --- */
+.info-grid {
+  .info-row {
+    display: flex;
+    margin-bottom: 12px;
     font-size: 1.1rem;
-    font-weight: 500;
+    .label {
+      min-width: 85px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .value {
+      flex: 1;
+      color: #cbd5e1;
+      text-transform: capitalize;
+    }
   }
 }
+
+/* --- BLOQUEO TOTAL CELULAR --- */
+@media (max-width: 768px) {
+  .escuela-card-dark:active {
+    transform: none !important; // Evita que se hunda al tocar
+    background: #1e1e1e !important;
+  }
+}
+
+.divider { height: 1px; background: rgba(255, 255, 255, 0.1); margin: 18px 0; }

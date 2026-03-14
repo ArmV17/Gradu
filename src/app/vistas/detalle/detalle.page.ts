@@ -1,11 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, Platform } from '@ionic/angular';
+import { IonicModule, Platform, ToastController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { Firestore, collection, collectionData, doc, updateDoc } from '@angular/fire/firestore';
 import * as CryptoJS from 'crypto-js';
 import { environment } from 'src/environments/environment';
+
+registerLocaleData(localeEs); // Registrar español para los días de la semana
 
 @Component({
   selector: 'app-detalle',
@@ -18,17 +21,18 @@ export class DetallePage implements OnInit {
   private route = inject(ActivatedRoute);
   private firestore = inject(Firestore);
   private platform = inject(Platform);
+  private toastCtrl = inject(ToastController);
   private readonly secretKey = environment.cryptoKey;
 
   nombreEscuela: string = '';
   grupos: any[] = [];
   isPC: boolean = false;
-  
-  // Este número debe ser el mismo que usas en el Home
   miNumeroEmpleado: string = '0001'; 
 
   ngOnInit() {
-    this.isPC = (this.platform.is('desktop') || window.innerWidth > 768);
+    const ancho = window.innerWidth;
+    // Si es móvil o pantalla pequeña, forzamos vista Staff
+    this.isPC = (ancho > 768) && !this.platform.is('mobile');
     this.nombreEscuela = this.route.snapshot.paramMap.get('nombre') || '';
     this.obtenerDatosAgrupados();
   }
@@ -37,24 +41,25 @@ export class DetallePage implements OnInit {
     const ref = collection(this.firestore, 'medidas');
     collectionData(ref, { idField: 'id' }).subscribe((res: any[]) => {
       
-      // 1. Desencriptar y filtrar primero por la escuela
       const alumnos = res.map(m => ({
         ...m,
         escuelaDesc: this.decrypt(m.escuela),
         profesorDesc: this.decrypt(m.profesor),
         nombreDesc: this.decrypt(m.nombreCompleto),
-        // Aseguramos que el ID del empleado sea string para comparar bien
+        notaAlumno: m.nota || m.notas || '', 
+        tallaToga: m.tallaToga || 'N/A',
+        tallaBirrete: m.tallaBirrete || 'N/A',
         empleadoID: m.numEmpleadoAsignado ? String(m.numEmpleadoAsignado).trim() : ''
       })).filter(m => m.escuelaDesc === this.nombreEscuela);
 
-      // 2. Agrupar por Profesor + Grado + Turno
-      const gruposMap = alumnos.reduce((acc, al) => {
+      const gruposMap = alumnos.reduce((acc: any, al: any) => {
         const llave = `${al.profesorDesc}-${al.grado}-${al.turno}`;
         if (!acc[llave]) {
           acc[llave] = {
             profesor: al.profesorDesc,
             grado: al.grado,
             turno: al.turno,
+            fechaEvento: al.fechaEvento || '',
             lugar: al.lugarEvento || '',
             ubicacion: al.direccionLugar || '',
             hora: al.horaEvento || '',
@@ -63,17 +68,22 @@ export class DetallePage implements OnInit {
             idsAlumnos: []
           };
         }
-        acc[llave].alumnos.push(al);
+        acc[llave].alumnos.push({
+          nombre: al.nombreDesc,
+          toga: al.tallaToga,
+          birrete: al.tallaBirrete,
+          nota: al.notaAlumno
+        });
         acc[llave].idsAlumnos.push(al.id);
         return acc;
       }, {});
 
       const todosLosGrupos = Object.values(gruposMap);
 
-      // 3. FILTRO CRÍTICO: Si es celular, solo dejamos los grupos de SU número
       if (this.isPC) {
         this.grupos = todosLosGrupos;
       } else {
+        // Solo mostramos el grupo del empleado 0001 en el celular
         this.grupos = todosLosGrupos.filter((g: any) => g.empleado === this.miNumeroEmpleado);
       }
     });
@@ -81,15 +91,19 @@ export class DetallePage implements OnInit {
 
   async guardarLogistica(grupo: any) {
     if (!this.isPC) return;
-    for (const id of grupo.idsAlumnos) {
-      const docRef = doc(this.firestore, `medidas/${id}`);
-      await updateDoc(docRef, {
-        lugarEvento: grupo.lugar,
-        direccionLugar: grupo.ubicacion,
-        horaEvento: grupo.hora,
-        numEmpleadoAsignado: String(grupo.empleado).trim()
-      });
-    }
+    try {
+      for (const id of grupo.idsAlumnos) {
+        const docRef = doc(this.firestore, `medidas/${id}`);
+        await updateDoc(docRef, {
+          lugarEvento: grupo.lugar,
+          direccionLugar: grupo.ubicacion,
+          horaEvento: grupo.hora,
+          fechaEvento: grupo.fechaEvento,
+          numEmpleadoAsignado: String(grupo.empleado).trim()
+        });
+      }
+      this.presentToast('Logística actualizada', 'success');
+    } catch (e) { this.presentToast('Error al guardar', 'danger'); }
   }
 
   private decrypt(text: string): string {
@@ -98,5 +112,10 @@ export class DetallePage implements OnInit {
       const bytes = CryptoJS.AES.decrypt(text, this.secretKey);
       return bytes.toString(CryptoJS.enc.Utf8) || text;
     } catch (e) { return text; }
+  }
+
+  async presentToast(msg: string, color: string) {
+    const t = await this.toastCtrl.create({ message: msg, duration: 2000, color });
+    t.present();
   }
 }
