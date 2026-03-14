@@ -1,9 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="custom-toolbar">
-    <ion-title>Estudio Gradu</ion-title>
-    <ion-buttons slot="end">
+    <ion-title>Estudio Gradu {{ isPC ? '• Administrador' : '• Staff' }}</ion-title>
+    <ion-buttons slot="end" *ngIf="isPC">
       <ion-button (click)="irAMedicion()" class="btn-nueva">
-        NUEVA MEDIDA
+        NUEVA ESCUELA
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -11,25 +11,69 @@
 
 <ion-content class="ion-padding gray-bg">
   <div class="responsive-container">
+    
     <div class="header-text">
-      <h1 class="main-title">Eventos por Escuela</h1>
-      <p class="sub-title">Escuelas con registros activos</p>
+      <h1 class="main-title">Logística de Eventos</h1>
+      <p class="sub-title" *ngIf="isPC">Gestiona fechas, lugares y asigna empleados por número de ID.</p>
+      <p class="sub-title" *ngIf="!isPC">Bienvenido. Aquí tienes tus eventos asignados.</p>
     </div>
 
     <ion-grid class="ion-no-padding">
       <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let escuela of (escuelas$ | async)">
+        <ion-col size="12" size-lg="6" *ngFor="let evento of (escuelas$ | async)">
           <div class="escuela-card-dark">
-            <div class="card-icon">
-              <ion-icon name="business"></ion-icon>
+  
+            <div class="card-header" (click)="verDetalleEscuela(evento.escuelaNombre)">
+              <div class="card-icon"><ion-icon name="school"></ion-icon></div>
+              <div class="card-info">
+                <h2 class="escuela-name">{{ evento.escuelaNombre }}</h2>
+                <p class="escuela-action">Ver alumnos registrados →</p>
+              </div>
             </div>
-            <div class="card-info">
-              <h2 class="escuela-name">{{ escuela }}</h2>
-              <p class="escuela-action">Ver estadísticas y registros</p>
+
+            <div class="divider"></div>
+
+            <div *ngIf="isPC" class="admin-panel">
+              <ion-list lines="none" class="dark-list">
+                <ion-item class="dark-input">
+                  <ion-label position="stacked">Nombre del Lugar / Salón</ion-label>
+                  <ion-input type="text" [(ngModel)]="evento.lugarEvento"></ion-input>
+                </ion-item>
+                <ion-item class="dark-input">
+                  <ion-label position="stacked">Número de Empleado Asignado</ion-label>
+                  <ion-input type="text" [(ngModel)]="evento.numEmpleadoAsignado"></ion-input>
+                </ion-item>
+              </ion-list>
+              <ion-button expand="block" (click)="guardarCambiosLogistica(evento)" color="primary">
+                Actualizar Evento
+              </ion-button>
             </div>
+
+            <div *ngIf="!isPC" class="staff-view">
+              <div class="info-row">
+                <ion-icon name="calendar-outline"></ion-icon>
+                <span><strong>Día:</strong> {{ evento.fechaEvento | date:'EEEE, d de MMMM':'':'es' }}</span>
+              </div>
+              <div class="info-row">
+                <ion-icon name="time-outline"></ion-icon>
+                <span><strong>Hora:</strong> {{ evento.horaEvento || 'Pendiente' }}</span>
+              </div>
+              <div class="info-row">
+                <ion-icon name="location-outline"></ion-icon>
+                <span><strong>Lugar:</strong> {{ evento.lugarEvento || 'Pendiente' }}</span>
+              </div>
+              <div class="assignment-tag">Asignado a #{{ miNumeroEmpleado }}</div>
+            </div>
+
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
+
+    <div *ngIf="(escuelas$ | async)?.length === 0" class="empty-state">
+      <ion-icon name="document-text-outline"></ion-icon>
+      <p>No tienes eventos asignados para tu ID #{{ miNumeroEmpleado }}</p>
+    </div>
+
   </div>
 </ion-content>

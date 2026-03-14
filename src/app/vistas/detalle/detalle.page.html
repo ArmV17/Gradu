@@ -1,0 +1,90 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ nombreEscuela }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding gray-bg">
+  <div class="responsive-container">
+
+    <div class="header-text">
+      <h1 class="main-title">Logística del Grupo</h1>
+      <p class="sub-title">Información del evento asignado</p>
+    </div>
+
+    <div *ngFor="let grupo of grupos" class="escuela-card-dark">
+      
+      <div class="card-header">
+        <div class="card-icon">
+          <ion-icon name="people-circle"></ion-icon>
+        </div>
+        <div class="info-box">
+          <h2 class="escuela-name">Prof: {{ grupo.profesor }}</h2>
+          <p class="tap-hint">{{ grupo.grado }} • {{ grupo.turno }}</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div *ngIf="isPC" class="admin-only">
+        <ion-list lines="none" class="dark-list">
+          <ion-item class="input-dark">
+            <ion-label position="stacked">LUGAR / SALÓN</ion-label>
+            <ion-input [(ngModel)]="grupo.lugar"></ion-input>
+          </ion-item>
+          
+          <ion-item class="input-dark">
+            <ion-label position="stacked">DIRECCIÓN</ion-label>
+            <ion-input [(ngModel)]="grupo.ubicacion"></ion-input>
+          </ion-item>
+
+          <div class="flex-row">
+            <ion-item class="input-dark flex-item">
+              <ion-label position="stacked">HORA</ion-label>
+              <ion-input type="time" [(ngModel)]="grupo.hora"></ion-input>
+            </ion-item>
+
+            <ion-item class="input-dark flex-item">
+              <ion-label position="stacked">ID EMPLEADO</ion-label>
+              <ion-input [(ngModel)]="grupo.empleado" placeholder="0001"></ion-input>
+            </ion-item>
+          </div>
+        </ion-list>
+
+        <ion-button expand="block" color="primary" class="btn-save" (click)="guardarLogistica(grupo)">
+          GUARDAR LOGÍSTICA
+        </ion-button>
+      </div>
+
+      <div *ngIf="!isPC" class="view-only">
+        <div class="info-item">
+          <ion-icon name="location-outline"></ion-icon>
+          <span><strong>Lugar:</strong> {{ grupo.lugar || 'Pendiente' }}</span>
+        </div>
+        <div class="info-row">
+          <ion-icon name="map-outline"></ion-icon>
+          <span><strong>Dirección:</strong> {{ grupo.ubicacion || 'Pendiente' }}</span>
+        </div>
+        <div class="info-item">
+          <ion-icon name="time-outline"></ion-icon>
+          <span><strong>Hora:</strong> {{ grupo.hora || '--:--' }}</span>
+        </div>
+        </div>
+
+      <ion-accordion-group class="ion-margin-top">
+        <ion-accordion value="alumnos">
+          <ion-item slot="header" color="dark">
+            <ion-label>Lista de Alumnos ({{ grupo.alumnos.length }})</ion-label>
+          </ion-item>
+          <div class="ion-padding alumnos-list" slot="content">
+            <p *ngFor="let alumno of grupo.alumnos">• {{ alumno.nombreDesc }}</p>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+    </div>
+  </div>
+</ion-content>

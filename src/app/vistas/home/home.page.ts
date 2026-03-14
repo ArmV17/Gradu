@@ -1,8 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, Platform, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+
+// Firebase
+import { 
+  Firestore, 
+  collection, 
+  collectionData, 
+  doc, 
+  updateDoc 
+} from '@angular/fire/firestore';
+
+// Utilidades
 import { Observable, map } from 'rxjs';
 import * as CryptoJS from 'crypto-js';
 import { environment } from 'src/environments/environment';
@@ -12,61 +23,125 @@ import { environment } from 'src/environments/environment';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  // IMPORTANTE: Estos imports resuelven los errores de ion-header, *ngIf y ngModel
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class HomePage implements OnInit {
+  // Inyecciones de dependencias
   private firestore = inject(Firestore);
   private router = inject(Router);
+  private platform = inject(Platform);
+  private toastCtrl = inject(ToastController);
   
-  // Clave desde environment
-  private readonly secretKey = environment.cryptoKey; 
+  private readonly secretKey = environment.cryptoKey;
 
-  escuelas$!: Observable<string[]>;
+  // Variables de control de vista
+  escuelas$!: Observable<any[]>;
+  isPC: boolean = false;
+  
+  // ID que se usará para filtrar en el celular
+  miNumeroEmpleado: string = '0001'; 
 
   constructor() {}
 
   ngOnInit() {
-    // 1. Definimos la referencia a la colección primero
+    // Determinamos si es PC basado en plataforma o ancho de ventana
+    this.isPC = this.platform.is('desktop') || window.innerWidth > 768;
+    this.cargarEventos();
+  }
+
+  /**
+   * Carga los eventos de Firestore, los descifra y aplica el filtro por empleado
+   */
+  cargarEventos() {
     const medicionesRef = collection(this.firestore, 'medidas');
     
-    // 2. Escuchamos los cambios
-    this.escuelas$ = collectionData(medicionesRef).pipe(
+    // Obtenemos los datos incluyendo el ID del documento para poder editar
+    this.escuelas$ = collectionData(medicionesRef, { idField: 'id' }).pipe(
       map((items: any[]) => {
-        console.log('Datos cifrados recibidos:', items);
+        // 1. Desciframos los nombres y normalizamos los campos de texto
+        const datosDescifrados = items.map(m => ({
+          ...m,
+          escuelaNombre: this.decrypt(m.escuela),
+          lugarEvento: m.lugarEvento || '',
+          fechaEvento: m.fechaEvento || '',
+          horaEvento: m.horaEvento || '',
+          direccionLugar: m.direccionLugar || '',
+          numEmpleadoAsignado: m.numEmpleadoAsignado ? String(m.numEmpleadoAsignado).trim() : ''
+        }));
 
-        const nombres = items.map(m => {
-          if (!m.escuela) return 'Sin Nombre';
-          
-          try {
-            // Intentamos desencriptar
-            const bytes = CryptoJS.AES.decrypt(m.escuela, this.secretKey);
-            const textoLimpio = bytes.toString(CryptoJS.enc.Utf8);
-
-            // Si textoLimpio está vacío, la llave está mal o el dato no estaba cifrado
-            if (!textoLimpio) {
-              console.warn('No se pudo desencriptar:', m.escuela);
-              return m.escuela; // Devolvemos el original si falla para no perder el dato
+        // 2. Agrupamos para mostrar solo una tarjeta por escuela en el Home
+        const unicas = datosDescifrados.reduce((acc: any[], current) => {
+          const existe = acc.find(item => item.escuelaNombre === current.escuelaNombre);
+          if (!existe) {
+            // Si es celular, solo agregamos si el empleado coincide
+            if (!this.isPC) {
+              if (current.numEmpleadoAsignado === this.miNumeroEmpleado) {
+                acc.push(current);
+              }
+            } else {
+              acc.push(current); // En PC van todas
             }
-
-            return textoLimpio;
-          } catch (e) {
-            console.error('Error en proceso de descifrado:', e);
-            return m.escuela;
           }
-        });
+          return acc;
+        }, []);
 
-        // 3. Quitamos duplicados (Set) y limpiamos espacios
-        return [...new Set(nombres)].sort(); 
+        return unicas;
       })
     );
   }
+
+  /**
+   * Guarda los cambios de logística realizados en la PC
+   */
+  async guardarCambiosLogistica(evento: any) {
+    if (!this.isPC) return;
+
+    try {
+      const docRef = doc(this.firestore, `medidas/${evento.id}`);
+      await updateDoc(docRef, {
+        lugarEvento: evento.lugarEvento || '',
+        fechaEvento: evento.fechaEvento || '',
+        horaEvento: evento.horaEvento || '',
+        direccionLugar: evento.direccionLugar || '',
+        numEmpleadoAsignado: String(evento.numEmpleadoAsignado).trim()
+      });
+      
+      this.presentToast(`Logística de ${evento.escuelaNombre} actualizada`, 'success');
+    } catch (error) {
+      console.error(error);
+      this.presentToast('Error al actualizar datos', 'danger');
+    }
+  }
+
+  // --- Navegación ---
 
   irAMedicion() {
     this.router.navigate(['/medicion']);
   }
 
-  verDetalleEscuela(escuela: string) {
-    console.log('Escuela seleccionada:', escuela);
-    // Próximo paso: navegar a activos con este filtro
+  verDetalleEscuela(nombre: string) {
+    this.router.navigate(['/detalle', { nombre: nombre }]);
+  }
+
+  // --- Herramientas auxiliares ---
+
+  private decrypt(ciphertext: string): string {
+    if (!ciphertext) return '';
+    try {
+      const bytes = CryptoJS.AES.decrypt(ciphertext, this.secretKey);
+      return bytes.toString(CryptoJS.enc.Utf8) || ciphertext;
+    } catch (e) {
+      return ciphertext;
+    }
+  }
+
+  async presentToast(mensaje: string, color: string) {
+    const toast = await this.toastCtrl.create({
+      message: mensaje,
+      duration: 2000,
+      color: color
+    });
+    toast.present();
   }
 }

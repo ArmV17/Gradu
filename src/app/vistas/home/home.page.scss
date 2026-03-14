@@ -1,84 +1,195 @@
-.gray-bg { --background: #ffffff; } // Fondo blanco para que resalten las cards
+/* --- CONFIGURACIÓN DE FONDO Y CONTENEDOR --- */
+.gray-bg {
+  --background: #fdfdfd; // Fondo claro para resaltar las tarjetas oscuras
+}
 
+.responsive-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+/* --- TOOLBAR ESTILO DARK --- */
 .custom-toolbar {
   --background: #1e1e1e;
-  --color: white;
+  --color: #ffffff;
   --border-width: 0;
   
   ion-title {
     font-weight: 800;
-    font-size: 1.1rem;
+    letter-spacing: 0.5px;
   }
 }
 
 .btn-nueva {
   --color: #3880ff;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
+/* --- TEXTOS DE ENCABEZADO --- */
 .header-text {
-  margin: 40px 0;
-  text-align: left;
+  margin: 35px 0 25px 10px;
+  
   .main-title {
     color: #071739;
-    font-weight: 800;
-    font-size: 1.8rem;
-    margin-bottom: 5px;
+    font-weight: 900;
+    font-size: 2.2rem;
+    margin: 0;
   }
+  
   .sub-title {
     color: #888;
     font-size: 1rem;
+    margin-top: 5px;
   }
 }
 
-/* LA TARJETA ESTILO MEDICIÓN */
+/* --- TARJETA OSCURA DE ESCUELA --- */
 .escuela-card-dark {
-  background: #1e1e1e; // Gris casi negro
+  background: #1e1e1e;
   border-radius: 25px;
-  padding: 25px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  padding: 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 
-  &:active { transform: scale(0.98); }
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  }
 
-  .card-icon {
-    background: #f0f2f5;
-    width: 60px;
-    height: 60px;
-    border-radius: 15px;
+  /* Encabezado de la tarjeta */
+  .card-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-right: 20px;
+    
+    .card-icon {
+      background: #3880ff; // Azul distintivo de Gradu
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 18px;
 
-    ion-icon {
-      font-size: 1.8rem;
-      color: #071739;
+      ion-icon {
+        font-size: 1.6rem;
+        color: #ffffff;
+      }
     }
-  }
 
-  .card-info {
-    .escuela-name {
-      color: #3880ff; // Azul brillante para el nombre
-      font-weight: 800;
-      font-size: 1.2rem;
-      margin: 0;
-      word-break: break-word;
-    }
-    .escuela-action {
-      color: #a0a0a0;
-      margin: 5px 0 0 0;
-      font-size: 0.9rem;
+    .info-box {
+      .escuela-name {
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 1.4rem;
+        margin: 0;
+      }
+      .tap-hint {
+        color: #3880ff;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-top: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
     }
   }
 }
 
-.responsive-container {
-  max-width: 900px;
-  margin: 0 auto;
+/* --- SEGURIDAD: OCULTAR EDICIÓN POR TAMAÑO DE PANTALLA --- */
+
+/* Vista exclusiva para Celulares (Mobile) */
+@media (max-width: 768px) {
+  .admin-only {
+    display: none !important; // Elimina físicamente los inputs de edición
+  }
+  
+  .view-only {
+    display: block !important;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      
+      strong {
+        color: #ffffff;
+        margin-right: 6px;
+      }
+    }
+
+    ion-badge {
+      margin-top: 10px;
+      --padding-start: 12px;
+      --padding-end: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .main-title {
+    font-size: 1.8rem !important;
+  }
+}
+
+/* Vista exclusiva para Administradores (PC) */
+@media (min-width: 769px) {
+  .view-only {
+    display: none; // No es necesario el resumen si tienes los inputs de edición
+  }
+
+  .admin-only {
+    display: block;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    .input-dark {
+      --background: #2a2a2a;
+      --color: white;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      --padding-start: 12px;
+      
+      ion-label {
+        color: #3880ff !important;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+      }
+      
+      ion-input {
+        --color: #ffffff;
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+/* --- ESTADOS VACÍOS --- */
+.empty-state {
+  text-align: center;
+  margin-top: 100px;
+  color: #94a3b8;
+  
+  ion-icon {
+    font-size: 5rem;
+    opacity: 0.2;
+    margin-bottom: 15px;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
 }

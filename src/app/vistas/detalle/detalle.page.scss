@@ -1,0 +1,68 @@
+/* Estilos específicos para Detalle */
+.gray-bg { --background: #fdfdfd; }
+
+.custom-toolbar {
+  --background: #1e1e1e;
+  --color: white;
+}
+
+.escuela-card-dark {
+  background: #1e1e1e;
+  border-radius: 25px;
+  padding: 22px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    .card-icon {
+      background: #3880ff;
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-right: 15px;
+      ion-icon { color: white; font-size: 1.5rem; }
+    }
+    .escuela-name { color: white; font-weight: 800; font-size: 1.2rem; margin: 0; }
+    .tap-hint { color: #888; font-size: 0.85rem; margin-top: 3px; }
+  }
+}
+
+.divider { height: 1px; background: rgba(255,255,255,0.1); margin: 18px 0; }
+
+/* VISTA STAFF CELULAR */
+.staff-view {
+  .info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    color: #ccc;
+    ion-icon { color: #3880ff; margin-right: 12px; font-size: 1.2rem; }
+    span { font-size: 0.95rem; text-transform: capitalize; } // Capitaliza el día
+    strong { color: white; margin-right: 5px; }
+  }
+}
+
+/* INPUTS ADMIN PC */
+.input-dark {
+  --background: #2a2a2a;
+  --color: white;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  ion-label { color: #3880ff !important; font-weight: bold; font-size: 0.75rem; }
+}
+
+.flex-row { display: flex; gap: 10px; .flex-item { flex: 1; } }
+
+/* ACORDEÓN DARK */
+.dark-accordion {
+  background: #2a2a2a;
+  border-radius: 12px;
+  ion-item { --background: #2a2a2a; --color: white; font-weight: bold; }
+  .alumnos-content {
+    background: #1e1e1e;
+    color: #aaa;
+    p { margin: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+  }
+}
