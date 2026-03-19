@@ -1,0 +1,33 @@
+<ion-tabs>
+  <div class="floating-container">
+    <div class="floating-tab-bar">
+      
+      <ion-tab-button tab="home" [class.tab-selected]="selectedTab === 'home'">
+        <div class="indicator"></div>
+        <ion-icon name="home-outline"></ion-icon>
+        <div class="spotlight"></div>
+      </ion-tab-button>
+
+      <ion-tab-button tab="medicion" [class.tab-selected]="selectedTab === 'medicion'">
+        <div class="indicator"></div>
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <div class="spotlight"></div>
+      </ion-tab-button>
+
+      <ion-tab-button tab="recepcion" [class.tab-selected]="selectedTab === 'recepcion'">
+        <div class="indicator"></div>
+        <ion-icon name="archive-outline"></ion-icon>
+        <div class="spotlight"></div>
+      </ion-tab-button>
+
+      <ion-tab-button tab="entrega" [class.tab-selected]="selectedTab === 'entrega'">
+        <div class="indicator"></div>
+        <ion-icon name="person-outline"></ion-icon>
+        <div class="spotlight"></div>
+      </ion-tab-button>
+
+      <div class="inner-user-label">{{ nombreUsuario }}</div>
+      
+    </div>
+  </div>
+</ion-tabs>

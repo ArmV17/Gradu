@@ -1,0 +1,125 @@
+/* --- COPIAR Y PEGAR ESTO --- */
+.gray-bg { --background: #f4f5f8; }
+.responsive-container { max-width: 900px; margin: 0 auto; padding: 10px; }
+
+.custom-toolbar {
+  --background: #1e1e1e;
+  --color: #ffffff;
+  ion-title { font-weight: 800; text-transform: uppercase; }
+}
+
+.group-card {
+  background: #1a1c20 !important;
+  margin-bottom: 16px;
+  border-radius: 24px !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+
+  .card-item-header {
+    --background: #1a1c20;
+    --color: #ffffff;
+    --padding-top: 15px;
+    --padding-bottom: 15px;
+    &::part(detail-icon) { display: none; }
+
+    .school-name-white {
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .location-text {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .event-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      .badge-pill {
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.08);
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        &.grado { background: rgba(56, 128, 255, 0.15); color: #3880ff; }
+      }
+    }
+  }
+}
+
+.list-content {
+  background: #ffffff;
+  padding: 10px 15px !important;
+
+  .inner-search-gray {
+    --background: #e9ecef;
+    --border-radius: 12px;
+    margin-bottom: 15px;
+  }
+
+  .student-delivery-row {
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      .name { color: #071739; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; }
+    }
+  }
+}
+
+.details-row {
+  display: flex;
+  gap: 12px;
+  .size-tag {
+    font-size: 0.75rem;
+    color: #64748b;
+    b { color: #3880ff; background: #f1f5f9; padding: 1px 5px; border-radius: 4px; }
+  }
+}
+
+/* ESTILO DE NOTAS ADHESIVAS */
+.notes-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #fffbe6;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border-left: 3px solid #ffd000;
+  margin-top: 6px;
+
+  ion-icon {
+    font-size: 0.9rem;
+    color: #856404;
+  }
+
+  .notes-text {
+    font-size: 0.7rem;
+    color: #856404;
+    font-style: italic;
+  }
+}
+
+.footer-count {
+  margin-top: 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-align: center;
+  text-transform: uppercase;
+}

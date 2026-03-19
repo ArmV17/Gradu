@@ -1,0 +1,102 @@
+// Ocultamos la barra nativa de Ionic porque estamos fabricando una personalizada
+ion-tab-bar {
+  display: none !important;
+}
+
+/* 1. Fondo transparente para que no haya manchas grises detrás de la isla */
+ion-tabs {
+  background: transparent;
+}
+
+/* 2. CONTENEDOR FLOTANTE (LA ISLA) */
+.floating-container {
+  position: fixed;
+  bottom: calc(15px + var(--ion-safe-area-bottom)); 
+  left: 5%;
+  right: 5%;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transition: bottom 0.3s ease-in-out;
+}
+
+/* 3. LA BARRA NEGRA */
+.floating-tab-bar {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  background: #000000 !important;
+  border-radius: 25px;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-top: 10px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  ion-tab-button {
+    --background: transparent !important;
+    --color: #555;
+    --color-selected: #ffffff;
+    height: 50px; 
+    margin: 0;
+    position: relative;
+
+    // Efecto cuando la pestaña está seleccionada
+    &.tab-selected {
+      .indicator, .spotlight {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* EL NOMBRE ADENTRO EN LA PARTE INFERIOR */
+  .inner-user-label {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    pointer-events: none;
+  }
+}
+
+/* 4. EFECTOS VISUALES (Luz blanca arriba) */
+.indicator {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35px;
+  height: 3px;
+  background: #ffffff;
+  box-shadow: 0 0 15px #fff;
+  border-radius: 0 0 5px 5px;
+  opacity: 0;
+  transition: 0.3s ease;
+}
+
+.spotlight {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  opacity: 0;
+  transition: 0.4s ease;
+  pointer-events: none;
+}
+
+/* Evitar que el contenido del HOME quede oculto detrás de la barra */
+:host-context(ion-content) {
+  --padding-bottom: 100px;
+}
