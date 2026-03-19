@@ -1,37 +1,387 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
-
-/* Core CSS required for Ionic components to work properly */
+/* --- Core Ionic Imports --- */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
-
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/* --- CONFIGURACIÓN BASE --- */
+:root {
+  --ion-font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+body {
+  background-color: #f4f7fa; 
+}
+
+.gray-bg {
+  --background: #f4f7fa !important;
+  background: #f4f7fa !important;
+}
+
+/* --- NAVBAR SUPERIOR (ADMIN & GENERAL) --- */
+.custom-toolbar {
+  --background: #1a1c20 !important;
+  --color: #ffffff !important;
+  --border-width: 0;
+  --padding-top: env(safe-area-inset-top);
+  min-height: 60px;
+  
+  ion-title {
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    font-size: 1.1rem !important;
+    color: #ffffff !important;
+  }
+
+  ion-button {
+    --color: #ffffff !important;
+    font-weight: 700;
+  }
+}
+
+/* --- SEGMENTOS DE NAVEGACIÓN (ADMIN) --- */
+.segment-toolbar {
+  --background: #1a1c20 !important;
+  --border-width: 0;
+  padding-bottom: 12px;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+
+  ion-segment {
+    --background: #2d3139 !important;
+    border-radius: 12px;
+    margin: 0 15px;
+    padding: 3px;
+
+    ion-segment-button {
+      --color: #94a3b8 !important;
+      --color-checked: #ffffff !important;
+      --indicator-color: #3880ff !important;
+      --indicator-height: 100%;
+      --indicator-border-radius: 10px;
+      font-weight: 800;
+    }
+  }
+}
+
+/* --- CABECERAS DE TEXTO (NUEVO REGISTRO / STAFF) --- */
+.register-header {
+  margin-bottom: 20px;
+  padding: 0 5px;
+
+  h2 {
+    color: #1a1c20 !important; // NEGRO PARA VISIBILIDAD
+    font-weight: 900 !important;
+    font-size: 1.5rem !important;
+    margin: 0 0 4px 0;
+  }
+
+  p {
+    color: #64748b !important; // GRIS OSCURO PARA VISIBILIDAD
+    font-size: 0.9rem !important;
+    margin: 0;
+  }
+}
+
+/* --- TARJETAS DE CONTENIDO (ADMIN & STAFF) --- */
+.event-card, .register-container {
+  background: #ffffff !important;
+  border-radius: 24px;
+  margin-bottom: 25px;
+  padding: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+
+  .card-top {
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    h3 { color: #1a1c20 !important; font-weight: 800; text-transform: uppercase; }
+  }
+}
+
+/* --- INPUTS UNIVERSALES (CORREGIDOS PARA FONDO CLARO) --- */
+.input-item {
+  --background: #ffffff !important;
+  --padding-start: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db !important;
+  border-radius: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+
+  ion-label {
+    color: #4b5563 !important; // ETIQUETAS OSCURAS
+    font-weight: 700 !important;
+    font-size: 0.7rem !important;
+    text-transform: uppercase;
+  }
+
+  ion-input, ion-select {
+    --color: #111827 !important; // TEXTO NEGRO AL ESCRIBIR
+    color: #111827 !important;
+    font-weight: 600;
+  }
+
+  ion-icon { color: #3880ff; font-size: 1.3rem; }
+
+  &.assigned-box {
+    border: 1.5px solid #3880ff !important;
+    --background: #f0f7ff !important;
+  }
+}
+
+/* --- BOTONES --- */
+.btn-save-group, .btn-finalizar, .btn-update {
+  --background: #3880ff !important;
+  --color: #ffffff !important;
+  --border-radius: 14px;
+  height: 54px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- NAVEGACIÓN FLOTANTE (EMPLEADOS) --- */
+.floating-container {
+  position: fixed;
+  bottom: 20px;
+  left: 5%;
+  right: 5%;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.floating-tab-bar {
+  pointer-events: auto;
+  position: relative;
+  width: 100%;
+  height: 75px;
+  background: #000000 !important;
+  border-radius: 22px;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-top: 8px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+
+  ion-tab-button {
+    --background: transparent !important;
+    --color: #444;
+    --color-selected: #ffffff;
+    height: 48px;
+
+    .indicator {
+      position: absolute;
+      top: 0; width: 32px; height: 3px; background: #ffffff;
+      box-shadow: 0 0 12px #fff; opacity: 0; transition: 0.3s;
+    }
+
+    .spotlight {
+      position: absolute;
+      top: 0; width: 55px; height: 100%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+      clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+      opacity: 0; transition: 0.3s;
+    }
+
+    &.tab-selected .indicator, &.tab-selected .spotlight { opacity: 1; }
+  }
+
+  .inner-user-label {
+    position: absolute; bottom: 8px; left: 0; right: 0;
+    text-align: center; color: rgba(255, 255, 255, 0.4);
+    font-size: 0.55rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+}
+
+/* --- EFECTO MASK (SOLO EN TABS) --- */
+ion-tabs ion-router-outlet {
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 92%);
+  mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 92%);
+}
+
+ion-tabs ion-content {
+  --padding-bottom: 110px !important;
+}
+
+/* Ocultar barra nativa */
+ion-tab-bar { display: none !important; }
+
+/* --- CONTENEDOR DE REGISTRO (ADMIN-STAFF) --- */
+.main-card {
+  background: #ffffff !important;
+  border-radius: 28px;
+  padding: 30px 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  margin-top: 10px;
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 25px;
+
+    .icon-circle {
+      width: 70px;
+      height: 70px;
+      background: #f0f4ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      
+      ion-icon {
+        font-size: 2rem;
+        color: #3880ff;
+      }
+    }
+
+    h2 {
+      color: #1a1c20 !important; // Título en NEGRO
+      font-weight: 900;
+      font-size: 1.4rem;
+      margin: 0;
+    }
+
+    p {
+      color: #64748b !important; // Subtítulo en GRIS OSCURO
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+  }
+}
+
+/* --- AJUSTE DE INPUTS PARA REGISTRO --- */
+.form-list {
+  background: transparent !important;
+  padding: 0;
+
+  .input-item {
+    --background: #f8fafc !important;
+    --border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 15px;
+
+    ion-label {
+      color: #475569 !important; // Etiquetas en GRIS fuerte
+      font-weight: 700 !important;
+      font-size: 0.7rem !important;
+      text-transform: uppercase;
+    }
+
+    ion-input, ion-select {
+      --color: #0f172a !important; // Texto que escribes en NEGRO
+      color: #0f172a !important;
+      font-weight: 600;
+    }
+  }
+}
+
+/* BOTÓN FINALIZAR (AZUL) */
+.btn-action {
+  --background: #3880ff !important;
+  --color: #ffffff !important;
+  --border-radius: 16px;
+  height: 56px;
+  font-weight: 800;
+  margin-top: 20px;
+  box-shadow: 0 8px 20px rgba(56, 128, 255, 0.3);
+}
+
+/* --- TARJETA DE AGENDA (ADMIN-HOME) --- */
+.event-card {
+  background: #ffffff !important;
+  border-radius: 24px;
+  margin-bottom: 25px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+
+  .card-top {
+    padding: 18px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    
+    h3 {
+      margin: 0;
+      font-weight: 800;
+      color: #1a1c20 !important; // ESCUELA EN NEGRO
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 6px;
+      background: #3880ff;
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+  }
+
+  .card-body {
+    padding: 15px;
+    background: #ffffff;
+  }
+}
+
+/* --- BOTÓN ACTUALIZAR EN AGENDA --- */
+.btn-save-group {
+  --background: #3880ff !important;
+  --color: #ffffff !important;
+  --border-radius: 14px;
+  height: 52px;
+  font-weight: 800;
+  margin-top: 15px;
+  box-shadow: 0 6px 16px rgba(56, 128, 255, 0.25);
+}
+
+/* --- SEGMENTOS DE NAVEGACIÓN (CORREGIDO Y CENTRADO) --- */
+.segment-toolbar {
+  --background: #1a1c20 !important;
+  --border-width: 0;
+  padding: 0 15px 15px 15px; // Padding uniforme a los lados
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+
+  ion-segment {
+    --background: #2d3139 !important;
+    border-radius: 12px;
+    width: 100%; // Ocupa todo el ancho disponible
+    margin: 0 !important; // Elimina márgenes que lo empujan a un lado
+    display: flex;
+
+    ion-segment-button {
+      flex: 1; // Fuerza a que ambos botones midan EXACTAMENTE lo mismo
+      --color: #94a3b8 !important;
+      --color-checked: #ffffff !important;
+      --indicator-color: #3880ff !important;
+      --indicator-height: 100%;
+      --indicator-border-radius: 10px;
+      font-weight: 800;
+      min-height: 45px;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      margin: 0; // Sin separación interna extra
+    }
+  }
+}

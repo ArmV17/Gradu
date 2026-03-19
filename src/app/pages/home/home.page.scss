@@ -1,125 +1,202 @@
-/* --- COPIAR Y PEGAR ESTO --- */
-.gray-bg { --background: #f4f5f8; }
-.responsive-container { max-width: 900px; margin: 0 auto; padding: 10px; }
-
-.custom-toolbar {
-  --background: #1e1e1e;
-  --color: #ffffff;
-  ion-title { font-weight: 800; text-transform: uppercase; }
+/* --- CONFIGURACIÓN GENERAL --- */
+.gray-bg { 
+  --background: #f4f5f8; 
 }
 
+.responsive-container { 
+  max-width: 900px; 
+  margin: 0 auto; 
+  padding: 15px; 
+  // Espacio para que la Isla inferior no tape el último evento
+  padding-bottom: 120px; 
+}
+
+/* --- TOOLBAR DARK (IGUAL A MEDICIÓN Y TABS) --- */
+.custom-toolbar {
+  --background: #000000;
+  --color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  ion-title { 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    letter-spacing: 3px;
+    color: #E3C39D; // Color Crema
+    font-size: 1.1rem;
+  }
+
+  ion-button {
+    --color: #eb445a; // Color rojo para el botón de salir
+  }
+}
+
+/* --- TARJETAS DE GRUPOS (ESTILO ISLA DARK) --- */
 .group-card {
-  background: #1a1c20 !important;
-  margin-bottom: 16px;
-  border-radius: 24px !important;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  background: #000000 !important; // Negro sólido
+  margin-bottom: 20px;
+  border-radius: 28px !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+
+  ion-accordion {
+    background: transparent;
+  }
 
   .card-item-header {
-    --background: #1a1c20;
+    --background: #000000;
     --color: #ffffff;
-    --padding-top: 15px;
-    --padding-bottom: 15px;
-    &::part(detail-icon) { display: none; }
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+    border: none;
+    
+    &::part(detail-icon) { 
+      color: #E3C39D; // Flecha en crema
+      font-size: 1.5rem;
+    }
 
     .school-name-white {
       color: #ffffff;
       font-weight: 900;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
     }
 
     .location-text {
-      color: #94a3b8;
-      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
       display: flex;
       align-items: center;
-      gap: 5px;
-      margin-bottom: 10px;
+      gap: 6px;
+      margin-bottom: 12px;
+      
+      ion-icon { color: #E3C39D; }
     }
 
     .event-badges {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
+
       .badge-pill {
-        padding: 4px 10px;
-        border-radius: 8px;
-        font-size: 0.7rem;
-        font-weight: 800;
+        padding: 5px 12px;
+        border-radius: 10px;
+        font-size: 0.65rem;
+        font-weight: 900;
         text-transform: uppercase;
-        background: rgba(255, 255, 255, 0.08);
-        color: #94a3b8;
+        letter-spacing: 1px;
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.6);
         display: flex;
         align-items: center;
-        gap: 4px;
-        &.grado { background: rgba(56, 128, 255, 0.15); color: #3880ff; }
+        gap: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        ion-icon { font-size: 0.8rem; }
+
+        &.grado { 
+          background: rgba(227, 195, 157, 0.15); 
+          color: #E3C39D; 
+          border: 1px solid rgba(227, 195, 157, 0.2);
+        }
       }
     }
   }
 }
 
+/* --- CONTENIDO DESPLEGABLE (LISTA DE ALUMNOS) --- */
 .list-content {
-  background: #ffffff;
-  padding: 10px 15px !important;
+  background: #ffffff; // Mantenemos blanco para lectura fácil
+  padding: 15px !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 
   .inner-search-gray {
-    --background: #e9ecef;
-    --border-radius: 12px;
-    margin-bottom: 15px;
+    --background: #f1f3f5;
+    --border-radius: 14px;
+    margin-bottom: 20px;
+    --placeholder-color: #999;
   }
 
   .student-delivery-row {
-    padding: 12px 0;
+    padding: 15px 0;
     border-bottom: 1px solid #f1f5f9;
+    
+    &:last-child { border-bottom: none; }
+
     .header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
-      .name { color: #071739; font-weight: 800; font-size: 0.9rem; text-transform: uppercase; }
+      margin-bottom: 6px;
+      
+      .name { 
+        color: #071739; 
+        font-weight: 800; 
+        font-size: 0.95rem; 
+        text-transform: uppercase; 
+        letter-spacing: 0.5px;
+      }
     }
   }
 }
 
 .details-row {
   display: flex;
-  gap: 12px;
+  gap: 15px;
   .size-tag {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
     color: #64748b;
-    b { color: #3880ff; background: #f1f5f9; padding: 1px 5px; border-radius: 4px; }
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    b { 
+      color: #071739; 
+      background: #E3C39D; // Resaltado crema
+      padding: 2px 6px; 
+      border-radius: 6px; 
+      margin-left: 4px;
+    }
   }
 }
 
-/* ESTILO DE NOTAS ADHESIVAS */
+/* --- ESTILO DE NOTAS --- */
 .notes-row {
   display: flex;
   align-items: center;
-  gap: 5px;
-  background: #fffbe6;
-  padding: 5px 8px;
-  border-radius: 6px;
-  border-left: 3px solid #ffd000;
-  margin-top: 6px;
+  gap: 8px;
+  background: rgba(227, 195, 157, 0.1);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border-left: 4px solid #E3C39D;
+  margin-top: 10px;
 
   ion-icon {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     color: #856404;
   }
 
   .notes-text {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     color: #856404;
+    font-weight: 600;
     font-style: italic;
   }
 }
 
 .footer-count {
-  margin-top: 15px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  margin-top: 20px;
+  padding: 15px;
+  font-size: 0.75rem;
+  font-weight: 800;
   color: #94a3b8;
   text-align: center;
   text-transform: uppercase;
+  letter-spacing: 2px;
+  border-top: 1px dashed #ddd;
 }

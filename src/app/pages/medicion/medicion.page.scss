@@ -1,0 +1,274 @@
+/* --- CONFIGURACIÓN DE COLORES Y CONTENEDOR --- */
+:host {
+  --gradu-cream: #E3C39D;
+  --gradu-navy: #071739;
+  --gradu-dark: #000000;
+}
+
+.gray-bg {
+  --background: #f4f7f9; // Fondo de la página ligeramente gris para contraste
+}
+
+.responsive-container {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 15px;
+  // ESPACIO CRÍTICO: Para que la barra inferior (Isla) no tape el último resultado
+  padding-bottom: 140px; 
+}
+
+/* --- TOOLBAR SUPERIOR (ESTILO DARK) --- */
+.custom-toolbar {
+  --background: #000000;
+  --color: #ffffff;
+  --border-style: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  
+  ion-title {
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 1rem;
+    color: var(--gradu-cream);
+  }
+}
+
+/* --- TARJETA DEL FORMULARIO (MODERNA Y CLARA) --- */
+.form-card {
+  background: white;
+  padding: 25px;
+  border-radius: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+  margin-bottom: 30px;
+  border: 1px solid rgba(0,0,0,0.02);
+
+  .header-with-lock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    
+    .section-title {
+      color: var(--gradu-navy);
+      font-weight: 900;
+      font-size: 1.3rem;
+      margin: 0;
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px; left: 0;
+        width: 30px; height: 4px;
+        background: var(--gradu-cream);
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+/* --- INPUTS PERSONALIZADOS --- */
+.custom-input {
+  --background: #f8f9fb;
+  --border-radius: 15px;
+  margin-bottom: 12px;
+  --padding-start: 15px;
+  border: 1px solid #edf2f7;
+  transition: 0.3s;
+
+  &.ion-focused {
+    border: 1px solid var(--gradu-cream);
+  }
+
+  ion-label {
+    color: #888 !important;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  ion-input, ion-textarea {
+    --color: #000;
+    font-weight: 600;
+  }
+}
+
+/* --- SEGMENTS (TALLAS Y TURNO) --- */
+.label-talla, .label-talla-turno {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #a0aec0;
+  margin: 15px 0 8px 5px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.talla-segment, .talla-segment-turno {
+  --background: #edf2f7;
+  border-radius: 14px;
+  padding: 4px;
+  
+  ion-segment-button {
+    --color: #4a5568;
+    --color-checked: #fff;
+    --indicator-color: var(--gradu-navy);
+    --border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    min-height: 42px;
+  }
+}
+
+.btn-guardar {
+  margin-top: 25px;
+  --background: var(--gradu-navy);
+  --color: var(--gradu-cream);
+  --border-radius: 18px;
+  height: 60px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  box-shadow: 0 10px 20px rgba(7, 23, 57, 0.2);
+}
+
+/* --- BUSCADOR --- */
+.custom-search {
+  --background: #ffffff;
+  --border-radius: 20px;
+  margin: 10px 0 25px 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+  --placeholder-color: #999;
+}
+
+/* --- TARJETA DE RESULTADO (MATCH CON LA ISLA NEGRA) --- */
+.alumno-card-pro {
+  background: #000000 !important; // NEGRO IGUAL A TABS
+  border-radius: 28px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  .card-header-pro {
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    .badge-group {
+      display: flex; gap: 8px;
+      
+      .status-badge {
+        background: #ff4961; color: white;
+        padding: 5px 12px; border-radius: 10px;
+        font-size: 0.6rem; font-weight: 900; text-transform: uppercase;
+        &.matutino { background: #2dd36f; }
+      }
+      
+      .grade-badge {
+        background: rgba(227, 195, 157, 0.15);
+        color: var(--gradu-cream);
+        padding: 5px 12px; border-radius: 10px;
+        font-size: 0.65rem; font-weight: 900;
+      }
+    }
+  }
+
+  .card-content-pro {
+    padding: 25px;
+
+    .school-name {
+      color: rgba(255, 255, 255, 0.4); // Estilo sutil tipo "JOSE ARMANDO"
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+
+    .student-name {
+      color: #ffffff;
+      font-size: 1.6rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+      margin: 0 0 25px 0;
+    }
+
+    .sizes-container {
+      display: flex; gap: 15px; margin-bottom: 25px;
+
+      .size-item {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.04);
+        padding: 18px 10px;
+        border-radius: 22px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        .size-label {
+          display: block;
+          color: rgba(255, 255, 255, 0.3);
+          font-size: 0.6rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          margin-bottom: 5px;
+        }
+
+        .size-value {
+          color: var(--gradu-cream);
+          font-size: 1.8rem;
+          font-weight: 900;
+        }
+      }
+    }
+
+    .notes-pro {
+      background: rgba(227, 195, 157, 0.04);
+      border-left: 3px solid var(--gradu-cream);
+      padding: 15px;
+      border-radius: 15px;
+      display: flex; align-items: center; gap: 12px;
+      
+      ion-icon { color: var(--gradu-cream); font-size: 1.4rem; }
+      p { color: rgba(227, 195, 157, 0.9); margin: 0; font-size: 0.85rem; font-weight: 600; }
+    }
+  }
+
+  .card-footer-pro {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 15px 25px;
+    display: flex; align-items: center; gap: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    ion-icon { color: var(--gradu-cream); font-size: 1.2rem; }
+    strong { color: white; font-weight: 800; }
+  }
+}
+
+/* --- BLOQUEO DE FORMULARIO --- */
+.text-lock-container {
+  display: flex; align-items: center; gap: 8px;
+  .lock-action-text {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    &.is-locked { color: var(--gradu-navy); font-weight: 900; }
+  }
+}
+
+/* --- RESPONSIVO PARA TURNO --- */
+@media (min-width: 768px) {
+  .turno-col-pc {
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding-left: 20px;
+  }
+}

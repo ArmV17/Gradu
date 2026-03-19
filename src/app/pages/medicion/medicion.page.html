@@ -1,0 +1,137 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registro de Medidas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="fileInput.click()" color="tertiary">
+        <ion-icon name="cloud-upload-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding gray-bg">
+  <div class="responsive-container">
+    <input type="file" #fileInput style="display: none" accept=".xlsx, .xls" (change)="importarExcel($event)"/>
+
+    <div class="form-card">
+      <div class="header-with-lock">
+        <h2 class="section-title">Datos del Evento</h2>
+        <div class="text-lock-container" (click)="toggleBloqueo()">
+          <span [class.is-locked]="camposBloqueados" class="lock-action-text">
+            {{ camposBloqueados ? 'DESBLOQUEAR' : 'BLOQUEAR' }}
+          </span>
+        </div>
+      </div>
+
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-align-items-end">
+          <ion-col size="12" size-md="8">
+            <ion-item lines="none" class="custom-input" [disabled]="camposBloqueados">
+              <ion-label position="stacked">Escuela</ion-label>
+              <ion-input [(ngModel)]="alumno.escuela" placeholder="Nombre de la institución"></ion-input>
+            </ion-item>
+          </ion-col>
+          
+          <ion-col size="12" size-md="4" class="turno-col-pc">
+            <h3 class="label-talla-turno">Turno</h3>
+            <ion-segment [(ngModel)]="alumno.turno" mode="ios" class="talla-segment-turno" [disabled]="camposBloqueados">
+              <ion-segment-button value="Matutino"><ion-label>Mat.</ion-label></ion-segment-button>
+              <ion-segment-button value="Vespertino"><ion-label>Ves.</ion-label></ion-segment-button>
+            </ion-segment>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" size-md="6">
+            <ion-item lines="none" class="custom-input" [disabled]="camposBloqueados">
+              <ion-label position="stacked">Grado/Grupo</ion-label>
+              <ion-input [(ngModel)]="alumno.grado" placeholder="Ej: 6to A"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md="6">
+            <ion-item lines="none" class="custom-input" [disabled]="camposBloqueados">
+              <ion-label position="stacked">Profesor</ion-label>
+              <ion-input [(ngModel)]="alumno.profesor" placeholder="Nombre del maestro"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <h2 class="section-title" style="margin-top: 25px;">Datos del Alumno</h2>
+      <ion-item lines="none" class="custom-input">
+        <ion-label position="stacked">Nombre Completo</ion-label>
+        <ion-input [(ngModel)]="alumno.nombreCompleto" placeholder="Apellidos y Nombres"></ion-input>
+      </ion-item>
+
+      <h3 class="label-talla">Talla de Toga</h3>
+      <ion-segment [(ngModel)]="alumno.tallaToga" mode="ios" class="talla-segment">
+        <ion-segment-button *ngFor="let t of ['XS','S','M','L','XL']" [value]="t"><ion-label>{{t}}</ion-label></ion-segment-button>
+      </ion-segment>
+
+      <h3 class="label-talla">Talla de Birrete</h3>
+      <ion-segment [(ngModel)]="alumno.tallaBirrete" mode="ios" class="talla-segment">
+        <ion-segment-button *ngFor="let b of ['S','M','L']" [value]="b"><ion-label>{{b}}</ion-label></ion-segment-button>
+      </ion-segment>
+
+      <ion-item lines="none" class="custom-input" style="margin-top: 20px;">
+        <ion-label position="stacked">Notas de Ajuste</ion-label>
+        <ion-textarea [(ngModel)]="alumno.notas" rows="3" placeholder="Ej: Manga corta..."></ion-textarea>
+      </ion-item>
+
+      <ion-button expand="block" class="btn-guardar" (click)="guardarMedicion()">
+        REGISTRAR ALUMNO
+      </ion-button>
+    </div>
+
+    <div class="list-container">
+      <div class="list-header">
+        <h2 class="section-title">
+          {{ (filtroBusqueda$ | async) === '' ? 'Último Registro' : 'Registrados' }}
+        </h2>
+      </div>
+
+      <ion-searchbar (ionInput)="buscar($event)" placeholder="Buscar alumno..." mode="ios" class="custom-search"></ion-searchbar>
+      
+      <div *ngFor="let m of (mediciones$ | async)" class="alumno-card-pro">
+        <div class="card-header-pro">
+          <div class="badge-group">
+            <span class="status-badge" [class.vespertino]="m.turno === 'Vespertino'">{{ m.turno }}</span>
+            <span class="grade-badge">{{ m.grado }}</span>
+          </div>
+          <ion-button fill="clear" (click)="eliminar(m.id)" class="delete-btn">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div class="card-content-pro">
+          <h1 class="school-name">{{ m.escuela }}</h1>
+          <h2 class="student-name">{{ m.nombreCompleto }}</h2>
+          
+          <div class="sizes-container">
+            <div class="size-item">
+              <span class="size-label">TOGA</span>
+              <span class="size-value">{{ m.tallaToga }}</span>
+            </div>
+            <div class="size-item">
+              <span class="size-label">BIRRETE</span>
+              <span class="size-value">{{ m.tallaBirrete }}</span>
+            </div>
+          </div>
+
+          <div class="notes-pro" *ngIf="m.notas">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <p>{{ m.notas }}</p>
+          </div>
+        </div>
+
+        <div class="card-footer-pro">
+          <ion-icon name="person-circle-outline"></ion-icon>
+          <span>Profesor: <strong>{{ m.profesor }}</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
