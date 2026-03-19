@@ -23,6 +23,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/medicion/medicion.page').then( m => m.MedicionPage)
       },
       {
+        path: 'entrega',
+        loadComponent: () => import('./pages/entrega/entrega.page').then( m => m.EntregaPage)
+      },
+      {
+        path: 'recepcion',
+        loadComponent: () => import('./pages/recepcion/recepcion.page').then( m => m.RecepcionPage)
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full',

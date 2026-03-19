@@ -1,0 +1,74 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-title>Control de Grupos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="gray-bg ion-padding">
+  <div class="responsive-container">
+    
+    <ion-accordion-group expand="inset">
+      <ion-accordion *ngFor="let g of (grupos$ | async); trackBy: trackByGrupo" [value]="g.id_grupo" class="group-card">
+        
+        <ion-item slot="header" lines="none" class="card-item-header" detail="false">
+          <ion-label>
+            <h2 class="school-name-white">{{ g.escuela }}</h2>
+            <div class="group-info-light">
+              <span class="profesor-label">Prof: <strong>{{ g.profesor }}</strong></span>
+              <div class="event-badges">
+                <span class="badge-pill turno"><ion-icon name="time-outline"></ion-icon> {{ g.turno }}</span>
+                <span class="badge-pill grado"><ion-icon name="school-outline"></ion-icon> {{ g.grado }}</span>
+                <span class="badge-pill counter" [class.completed]="g.entregados === g.total">{{ g.entregados }} / {{ g.total }}</span>
+              </div>
+            </div>
+          </ion-label>
+        </ion-item>
+
+        <div slot="content" class="list-content">
+          <div class="search-box">
+            <ion-searchbar (ionInput)="buscarInterno($event, g)" placeholder="Buscar alumno..." mode="ios" class="inner-search-gray"></ion-searchbar>
+          </div>
+
+         <div class="students-container">
+            <div *ngFor="let a of getAlumnos(g); trackBy: trackByAlumno" class="student-delivery-row">
+              
+              <div class="student-content">
+                
+                <div class="header-row">
+                  <span class="name">{{ a.nombreCompleto }}</span>
+                  
+                  <div class="delivery-actions">
+                    <ion-button (click)="toggleEntrega(a)" 
+                                [fill]="a.entregado ? 'solid' : 'outline'" 
+                                [color]="a.entregado ? 'success' : 'medium'" 
+                                class="btn-check-mini">
+                      <ion-icon [name]="a.entregado ? 'checkmark-circle' : 'ellipse-outline'" slot="start"></ion-icon>
+                      {{ a.entregado ? 'Listo' : 'Entrgar' }}
+                    </ion-button>
+                  </div>
+                </div>
+
+                <div class="details-row">
+                  <span class="size-tag">Toga: <b>{{ a.tallaToga }}</b></span>
+                  <span class="size-tag">Birrete: <b>{{ a.tallaBirrete }}</b></span>
+                </div>
+
+                <div class="notes-row" *ngIf="a.notas">
+                  <ion-icon name="chatbubble-ellipses-outline" color="medium"></ion-icon>
+                  <span class="notes-text">{{ a.notas }}</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <ion-button (click)="agregarEmergencia(g)" fill="clear" expand="block" class="btn-add-extra">
+            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+            Agregar Alumno Extra
+          </ion-button>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+
+  </div>
+</ion-content>

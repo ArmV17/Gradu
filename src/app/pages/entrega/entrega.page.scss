@@ -1,0 +1,222 @@
+/* --- CONFIGURACIÓN DE FONDO Y CONTENEDOR --- */
+.gray-bg {
+  --background: #f4f5f8;
+}
+
+.responsive-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 15px;
+  // Espacio para la Isla Dark inferior
+  padding-bottom: 120px; 
+}
+
+/* --- TOOLBAR DARK (IGUAL A MEDICIÓN Y TABS) --- */
+.custom-toolbar {
+  --background: #000000;
+  --color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  ion-title {
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #E3C39D; // Crema Gradu
+    font-size: 1.1rem;
+  }
+}
+
+/* --- TARJETA DE GRUPO (ESTILO ISLA DARK) --- */
+.group-card {
+  background: #000000 !important; // Negro sólido
+  margin-bottom: 20px;
+  border-radius: 28px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+
+  ion-accordion {
+    background: transparent;
+  }
+
+  .card-item-header {
+    --background: #000000;
+    --color: #ffffff;
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+
+    &::part(detail-icon) {
+      color: #E3C39D; // Flecha crema
+      font-size: 1.5rem;
+    }
+
+    .school-name-white {
+      display: block;
+      color: #ffffff !important;
+      font-weight: 900;
+      font-size: 1.2rem;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .group-info-light {
+      .profesor-label {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        display: block;
+        margin-bottom: 12px;
+        strong { color: #E3C39D; }
+      }
+
+      .event-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+
+        .badge-pill {
+          padding: 5px 12px;
+          border-radius: 10px;
+          font-size: 0.65rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          background: rgba(255, 255, 255, 0.05);
+          color: rgba(255, 255, 255, 0.6);
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+
+          &.grado {
+            background: rgba(227, 195, 157, 0.15);
+            color: #E3C39D;
+            border: 1px solid rgba(227, 195, 157, 0.2);
+          }
+
+          &.counter {
+            background: #E3C39D;
+            color: #000;
+            &.completed { background: #2dd36f; color: #fff; }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* --- CONTENIDO DE LA LISTA BLANCA --- */
+.list-content {
+  background: #ffffff;
+  padding: 15px !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+  /* BUSCADOR GRIS */
+  .inner-search-gray {
+    --background: #f1f3f5; 
+    --border-radius: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* CONTENEDOR DE CADA ALUMNO */
+  .student-delivery-row {
+    padding: 15px 0;
+    border-bottom: 1px solid #f1f5f9;
+    &:last-child { border-bottom: none; }
+
+    .student-content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+        gap: 12px;
+
+        .name {
+          color: #071739;
+          font-weight: 800;
+          font-size: 0.95rem;
+          text-transform: uppercase;
+          flex: 1;
+          letter-spacing: 0.5px;
+        }
+      }
+    }
+  }
+}
+
+/* --- BOTÓN CHECK (ESTILO MEDICIÓN) --- */
+.btn-check-mini {
+  --border-radius: 10px;
+  height: 32px; 
+  font-size: 0.7rem;
+  font-weight: 900;
+  margin: 0;
+  min-width: 95px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  
+  &[color="success"] { --background: #2dd36f; }
+}
+
+/* --- DETALLES DE TALLAS --- */
+.details-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 6px;
+
+  .size-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    b { 
+      color: #071739; 
+      background: #E3C39D; // Resaltado crema
+      padding: 2px 6px; 
+      border-radius: 6px; 
+    }
+  }
+}
+
+/* --- FILA DE NOTAS --- */
+.notes-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(227, 195, 157, 0.05);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border-left: 4px solid #E3C39D;
+  margin-top: 8px;
+
+  ion-icon { font-size: 1.1rem; color: #856404; }
+  .notes-text { font-size: 0.8rem; color: #856404; font-weight: 600; font-style: italic; }
+}
+
+/* --- BOTÓN AGREGAR EXTRA --- */
+.btn-add-extra {
+  margin-top: 20px;
+  --color: #E3C39D;
+  background: #000;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- RESPONSIVIDAD PC --- */
+@media (min-width: 768px) {
+  .btn-check-mini { height: 40px; font-size: 0.8rem; min-width: 120px; }
+  .header-row .name { font-size: 1.1rem !important; }
+}
