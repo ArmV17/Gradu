@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// IMPORTANTE: Registrar todos los componentes usados en el HTML
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, 
   IonInput, IonButton, IonIcon, IonLabel, IonTextarea, IonSearchbar,
@@ -17,7 +16,7 @@ import {
 
 // RxJS
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { map, switchMap, catchError } from 'rxjs/operators';
+import { map, switchMap, catchError, debounceTime } from 'rxjs/operators';
 
 // Librerías
 import * as XLSX from 'xlsx';
@@ -39,34 +38,16 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./medicion.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonList, 
-    IonItem, 
-    IonInput, 
-    IonButton, 
-    IonIcon, 
-    IonLabel, 
-    IonTextarea, 
-    IonSearchbar,
-    IonButtons,
-    IonBackButton,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonSegment,
-    IonSegmentButton
+    CommonModule, FormsModule, IonContent, IonHeader, IonTitle, IonToolbar, 
+    IonList, IonItem, IonInput, IonButton, IonIcon, IonLabel, IonTextarea, 
+    IonSearchbar, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, 
+    IonSegment, IonSegmentButton
   ]
 })
 export class MedicionPage implements OnInit {
   private firestore = inject(Firestore);
   private toastCtrl = inject(ToastController);
   private loadingCtrl = inject(LoadingController);
-
   private readonly secretKey = environment.cryptoKey;
 
   public camposBloqueados: boolean = false;
@@ -86,17 +67,10 @@ export class MedicionPage implements OnInit {
   public filtroBusqueda$ = new BehaviorSubject<string>('');
 
   constructor() {
-    // Registro de iconos
     addIcons({
-      cloudUploadOutline,
-      trashOutline,
-      documentTextOutline,
-      personCircleOutline,
-      searchOutline,
-      lockClosedOutline,
-      lockOpenOutline,
-      saveOutline,
-      schoolOutline
+      cloudUploadOutline, trashOutline, documentTextOutline,
+      personCircleOutline, searchOutline, lockClosedOutline,
+      lockOpenOutline, saveOutline, schoolOutline
     });
   }
 
@@ -107,15 +81,17 @@ export class MedicionPage implements OnInit {
     this.mediciones$ = collectionData(q, { idField: 'id' }).pipe(
       map(meds => meds.map(m => ({
         ...m,
-        nombreCompleto: this.decrypt(m['nombreCompleto'] || ''),
-        escuela: this.decrypt(m['escuela'] || ''),
-        profesor: this.decrypt(m['profesor'] || ''),
+        nombreCompleto: this.decrypt(m['nombreCompleto']),
+        escuela: this.decrypt(m['escuela']),
+        profesor: this.decrypt(m['profesor']),
       }))),
       switchMap(medsDescifrados => this.filtroBusqueda$.pipe(
+        debounceTime(300), // Espera 300ms antes de filtrar para no saturar el cel
         map(filtro => {
           const texto = filtro.trim().toLowerCase();
-          if (texto === '') {
-            return medsDescifrados.length > 0 ? [medsDescifrados[0]] : [];
+          if (!texto) {
+            // Si no hay búsqueda, mostramos solo los últimos 3 para no llenar la pantalla
+            return medsDescifrados.slice(0, 3);
           }
           return medsDescifrados.filter(m => 
             m.nombreCompleto.toLowerCase().includes(texto) ||
@@ -130,24 +106,27 @@ export class MedicionPage implements OnInit {
     );
   }
 
+  // --- MÉTODOS DE SEGURIDAD ---
   private encrypt(text: string): string {
     if (!text) return '';
-    return CryptoJS.AES.encrypt(text.trim(), this.secretKey).toString();
+    return CryptoJS.AES.encrypt(text.trim().toUpperCase(), this.secretKey).toString();
   }
 
   private decrypt(ciphertext: string): string {
-    if (!ciphertext) return '';
+    if (!ciphertext || ciphertext.length < 10) return ciphertext || '';
     try {
       const bytes = CryptoJS.AES.decrypt(ciphertext, this.secretKey);
-      return bytes.toString(CryptoJS.enc.Utf8) || 'Dato no legible';
+      const originalText = bytes.toString(CryptoJS.enc.Utf8);
+      return originalText || 'Dato no legible';
     } catch (e) {
       return 'Error de cifrado';
     }
   }
 
+  // --- LÓGICA DE NEGOCIO ---
   public toggleBloqueo() {
     if (!this.alumno.escuela || !this.alumno.grado) {
-      this.presentToast('Llena Escuela y Grado para poder bloquear', 'warning');
+      this.presentToast('Llena Escuela y Grado para bloquear', 'warning');
       return;
     }
     this.camposBloqueados = !this.camposBloqueados;
@@ -159,16 +138,18 @@ export class MedicionPage implements OnInit {
 
   async guardarMedicion() {
     if (!this.alumno.nombreCompleto.trim()) {
-      return this.presentToast('El nombre del alumno es obligatorio', 'warning');
+      return this.presentToast('El nombre es obligatorio', 'warning');
     }
     
     const loading = await this.loadingCtrl.create({ 
-      message: 'Cifrando y guardando...',
-      spinner: 'crescent'
+      message: 'Registrando...',
+      spinner: 'crescent',
+      mode: 'ios'
     });
     await loading.present();
 
     try {
+      // Al guardar usamos addDoc, Firebase lo manejará offline si es necesario
       await addDoc(collection(this.firestore, 'medidas'), {
         ...this.alumno,
         nombreCompleto: this.encrypt(this.alumno.nombreCompleto),
@@ -177,12 +158,15 @@ export class MedicionPage implements OnInit {
         fechaRegistro: new Date().getTime()
       });
       
-      this.presentToast('Alumno registrado correctamente', 'success');
+      this.presentToast('Alumno registrado con éxito', 'success');
+      
+      // Limpiamos campos manteniendo los bloqueados (Escuela, Grado, etc)
       this.alumno.nombreCompleto = '';
       this.alumno.notas = '';
       
     } catch (e) {
-      this.presentToast('Error de conexión', 'danger');
+      // Si falla aquí, es por un error de permisos, no por falta de internet
+      this.presentToast('Error al procesar el registro', 'danger');
     } finally {
       loading.dismiss();
     }
@@ -192,7 +176,10 @@ export class MedicionPage implements OnInit {
     const file = event.target.files[0];
     if (!file) return;
 
-    const loading = await this.loadingCtrl.create({ message: 'Procesando Excel...' });
+    const loading = await this.loadingCtrl.create({ 
+      message: 'Cifrando base de datos...',
+      mode: 'ios'
+    });
     await loading.present();
 
     const reader = new FileReader();
@@ -216,9 +203,9 @@ export class MedicionPage implements OnInit {
             fechaRegistro: new Date().getTime()
           });
         }
-        this.presentToast(`${json.length} alumnos importados`, 'success');
+        this.presentToast(`${json.length} alumnos cargados`, 'success');
       } catch (err) {
-        this.presentToast('Error al procesar Excel', 'danger');
+        this.presentToast('Archivo Excel no compatible', 'danger');
       } finally {
         loading.dismiss();
         event.target.value = '';
@@ -232,7 +219,7 @@ export class MedicionPage implements OnInit {
       await deleteDoc(doc(this.firestore, `medidas/${id}`));
       this.presentToast('Registro eliminado', 'secondary');
     } catch (e) {
-      this.presentToast('Error al eliminar', 'danger');
+      this.presentToast('No tienes permisos para eliminar', 'danger');
     }
   }
 
@@ -240,7 +227,7 @@ export class MedicionPage implements OnInit {
     const toast = await this.toastCtrl.create({
       message: msg,
       duration: 2500,
-      color: color,
+      color: color as any,
       position: 'bottom',
       mode: 'ios'
     });

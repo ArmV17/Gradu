@@ -1,23 +1,27 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// IMPORTANTE: Importar componentes específicos para Standalone
 import { 
-  IonContent, 
-  IonItem, 
-  IonInput, 
-  IonButton, 
-  IonIcon, 
-  NavController, 
-  ToastController, 
-  LoadingController 
+  IonContent, IonItem, IonInput, IonButton, IonIcon, 
+  NavController, ToastController, LoadingController 
 } from '@ionic/angular/standalone';
 
 // Firebase Auth & Firestore
-import { Auth, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
-import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+import { 
+  Auth, 
+  signInWithEmailAndPassword, 
+  onAuthStateChanged
+} from '@angular/fire/auth';
+import { 
+  Firestore, 
+  collection, 
+  query, 
+  where, 
+  getDocs,
+  getDoc,
+  doc 
+} from '@angular/fire/firestore';
 
-// Iconos
 import { addIcons } from 'ionicons';
 import { personOutline, lockClosedOutline, logInOutline } from 'ionicons/icons';
 
@@ -26,22 +30,14 @@ import { personOutline, lockClosedOutline, logInOutline } from 'ionicons/icons';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  // Agregamos los componentes de Ionic uno por uno aquí
   imports: [
-    CommonModule, 
-    FormsModule, 
-    IonContent, 
-    IonItem, 
-    IonInput, 
-    IonButton, 
-    IonIcon
+    CommonModule, FormsModule, IonContent, IonItem, IonInput, IonButton, IonIcon
   ]
 })
 export class LoginPage implements OnInit {
   numEmpleado: string = '';
   password: string = '';
 
-  // Inyección de dependencias moderna
   private auth = inject(Auth);
   private firestore = inject(Firestore);
   private navCtrl = inject(NavController);
@@ -49,16 +45,44 @@ export class LoginPage implements OnInit {
   private loadingCtrl = inject(LoadingController);
 
   constructor() {
-    // Registramos los iconos para que Ionic los reconozca
     addIcons({ personOutline, lockClosedOutline, logInOutline });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // --- ESTA ES LA MAGIA DE LA PERSISTENCIA ---
+    // Escucha si ya hay un usuario logueado en el teléfono
+    onAuthStateChanged(this.auth, async (user) => {
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(this.firestore, `usuarios/${user.uid}`));
+          
+          if (userDoc.exists()) {
+            const rol = userDoc.data()['rol'];
+            if (rol === 'admin') {
+              this.navCtrl.navigateRoot('/admin-home');
+            } else {
+              this.navCtrl.navigateRoot('/tabs/home');
+            }
+          } else {
+            this.navCtrl.navigateRoot('/tabs/home');
+          }
+        } catch (e) {
+          // (Firebase entrará en modo offline automáticamente)
+          this.navCtrl.navigateRoot('/tabs/home');
+        }
+      }
+    });
+  }
 
   async login() {
-    // Validar campos vacíos
     if (!this.numEmpleado || !this.password) {
       this.presentToast('Por favor, ingresa tus credenciales', 'warning');
+      return;
+    }
+
+    // BLOQUEO: Si no hay internet y no hay sesión previa, no podemos loguear de cero
+    if (!navigator.onLine) {
+      this.presentToast('No hay internet. Debes haber iniciado sesión previamente para trabajar offline.', 'danger');
       return;
     }
 
@@ -70,14 +94,10 @@ export class LoginPage implements OnInit {
     await loading.present();
 
     try {
-      // Limpiar rastro de usuario previo
-      await signOut(this.auth);
-
-      // Crear correo ficticio basado en número de empleado
       const email = `${this.numEmpleado.trim()}@estudio.com`;
-      await signInWithEmailAndPassword(this.auth, email, this.password);
-
-      // Buscar datos extra (rol) en Firestore
+      const userCredential = await signInWithEmailAndPassword(this.auth, email, this.password);
+      
+      // Una vez logueado, buscamos el rol
       const usuariosRef = collection(this.firestore, 'usuarios');
       const q = query(usuariosRef, where("numEmpleado", "==", this.numEmpleado.trim()));
       const querySnapshot = await getDocs(q);
@@ -86,27 +106,24 @@ export class LoginPage implements OnInit {
 
       if (!querySnapshot.empty) {
         const rol = querySnapshot.docs[0].data()['rol'];
-        // Navegar según el rol
         if (rol === 'admin') {
           this.navCtrl.navigateRoot('/admin-home');
         } else {
           this.navCtrl.navigateRoot('/tabs/home');
         }
       } else {
-        // Si no hay documento en Firestore, mandarlo a home por defecto
         this.navCtrl.navigateRoot('/tabs/home');
       }
 
     } catch (error: any) {
       await loading.dismiss();
-      console.error('Error de login:', error);
-      this.presentToast('Número de empleado o contraseña incorrectos', 'danger');
+      this.presentToast('Error al ingresar. Revisa tu conexión o datos.', 'danger');
     }
   }
 
   async presentToast(message: string, color: string) {
     const toast = await this.toastCtrl.create({
-      message: message,
+      message,
       duration: 3000,
       color: color as any,
       position: 'bottom'

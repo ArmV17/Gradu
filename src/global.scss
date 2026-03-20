@@ -228,3 +228,14 @@ ion-tabs ion-router-outlet {
   -webkit-mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 95%);
   mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 95%);
 }
+
+/* --- TOAST DE ESTADO (RED) --- */
+.custom-status-toast {
+  --border-radius: 15px;
+  --button-color: #ffffff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75rem;
+  margin-top: 10px;
+}

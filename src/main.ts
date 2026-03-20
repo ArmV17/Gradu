@@ -1,7 +1,13 @@
-import 'zone.js'; // <-- ESTO DEBE SER SIEMPRE LA LÍNEA 1
+import 'zone.js';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+// Añadimos initializeFirestore y persistentLocalCache
+import { 
+  provideFirestore, 
+  initializeFirestore, 
+  persistentLocalCache, 
+  persistentMultipleTabManager 
+} from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
@@ -15,7 +21,15 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular({ mode: 'md' }),
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),
+
+    provideFirestore(() => 
+      initializeFirestore(initializeApp(environment.firebase), {
+        localCache: persistentLocalCache({
+          tabManager: persistentMultipleTabManager()
+        })
+      })
+    ),
+    
     provideAuth(() => getAuth()),
   ],
 }).catch(err => {
