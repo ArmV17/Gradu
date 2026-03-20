@@ -11,18 +11,34 @@
 @import "@ionic/angular/css/flex-utils.css";
 @import '@ionic/angular/css/palettes/dark.system.css';
 
-/* --- CONFIGURACIÓN BASE --- */
+/* --- CONFIGURACIÓN BASE (FONDO ESTILO LOGIN) --- */
 :root {
   --ion-font-family: 'Inter', 'Roboto', sans-serif;
 }
 
-body {
-  background-color: #f4f7fa; 
+/* Aplicamos el fondo con imagen y difuminado a todas las páginas */
+ion-content {
+  // Ruta a tu imagen (asegúrate que el nombre y extensión sean correctos)
+  --background: url('/assets/img/estudio.jpeg') no-repeat center center / cover !important;
+
+  &::part(background) {
+    filter: blur(10px) brightness(0.9); // Efecto difuminado y un poco más oscuro
+    transform: scale(1.1); // Evita bordes blancos por el blur
+  }
 }
 
-.gray-bg {
-  --background: #f4f7fa !important;
-  background: #f4f7fa !important;
+/* Capa semitransparente superior para que el contenido sea legible */
+ion-content::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(244, 247, 250, 0.75);
+  z-index: -1;
+}
+
+body {
+  background-color: #00000015; 
 }
 
 /* --- NAVBAR SUPERIOR (ADMIN & GENERAL) --- */
@@ -51,7 +67,7 @@ body {
 .segment-toolbar {
   --background: #1a1c20 !important;
   --border-width: 0;
-  padding-bottom: 12px;
+  padding: 0 15px 15px 15px;
   border-bottom-left-radius: 18px;
   border-bottom-right-radius: 18px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
@@ -59,58 +75,43 @@ body {
   ion-segment {
     --background: #2d3139 !important;
     border-radius: 12px;
-    margin: 0 15px;
-    padding: 3px;
+    width: 100%;
+    display: flex;
 
     ion-segment-button {
+      flex: 1;
       --color: #94a3b8 !important;
       --color-checked: #ffffff !important;
       --indicator-color: #3880ff !important;
       --indicator-height: 100%;
       --indicator-border-radius: 10px;
       font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.75rem;
     }
   }
 }
 
-/* --- CABECERAS DE TEXTO (NUEVO REGISTRO / STAFF) --- */
-.register-header {
-  margin-bottom: 20px;
-  padding: 0 5px;
-
-  h2 {
-    color: #1a1c20 !important; // NEGRO PARA VISIBILIDAD
-    font-weight: 900 !important;
-    font-size: 1.5rem !important;
-    margin: 0 0 4px 0;
-  }
-
-  p {
-    color: #64748b !important; // GRIS OSCURO PARA VISIBILIDAD
-    font-size: 0.9rem !important;
-    margin: 0;
-  }
-}
-
-/* --- TARJETAS DE CONTENIDO (ADMIN & STAFF) --- */
-.event-card, .register-container {
-  background: #ffffff !important;
+/* --- TARJETAS DE CONTENIDO (ESTILO ESMERILADO) --- */
+.event-card, .register-container, .main-card, .admin-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(5px);
   border-radius: 24px;
   margin-bottom: 25px;
-  padding: 15px;
+  padding: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(226, 232, 240, 0.5);
 
-  .card-top {
-    background: #ffffff;
+  .header-section, .card-top {
     border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    h3 { color: #1a1c20 !important; font-weight: 800; text-transform: uppercase; }
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    h2, h3 { color: #1a1c20 !important; font-weight: 900; text-transform: uppercase; margin: 0; }
+    p { color: #64748b !important; font-size: 0.9rem; margin-top: 5px; }
   }
 }
 
-/* --- INPUTS UNIVERSALES (CORREGIDOS PARA FONDO CLARO) --- */
+/* --- INPUTS UNIVERSALES --- */
 .input-item {
   --background: #ffffff !important;
   --padding-start: 10px;
@@ -120,41 +121,37 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 
   ion-label {
-    color: #4b5563 !important; // ETIQUETAS OSCURAS
+    color: #4b5563 !important;
     font-weight: 700 !important;
     font-size: 0.7rem !important;
     text-transform: uppercase;
   }
 
   ion-input, ion-select {
-    --color: #111827 !important; // TEXTO NEGRO AL ESCRIBIR
+    --color: #111827 !important;
     color: #111827 !important;
     font-weight: 600;
   }
 
   ion-icon { color: #3880ff; font-size: 1.3rem; }
-
-  &.assigned-box {
-    border: 1.5px solid #3880ff !important;
-    --background: #f0f7ff !important;
-  }
 }
 
 /* --- BOTONES --- */
-.btn-save-group, .btn-finalizar, .btn-update {
+.btn-save-group, .btn-finalizar, .btn-update, .btn-action {
   --background: #3880ff !important;
   --color: #ffffff !important;
-  --border-radius: 14px;
-  height: 54px;
+  --border-radius: 16px;
+  height: 56px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
+  box-shadow: 0 8px 20px rgba(56, 128, 255, 0.2);
 }
 
-/* --- NAVEGACIÓN FLOTANTE (EMPLEADOS) --- */
+/* --- NAVEGACIÓN FLOTANTE (ISLA DARK) --- */
 .floating-container {
   position: fixed;
-  bottom: 20px;
+  bottom: calc(15px + var(--ion-safe-area-bottom));
   left: 5%;
   right: 5%;
   z-index: 9999;
@@ -170,7 +167,7 @@ body {
   width: 100%;
   height: 75px;
   background: #000000 !important;
-  border-radius: 22px;
+  border-radius: 25px;
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
@@ -210,178 +207,15 @@ body {
   }
 }
 
-/* --- EFECTO MASK (SOLO EN TABS) --- */
-ion-tabs ion-router-outlet {
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 92%);
-  mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 92%);
-}
-
+/* --- AJUSTES DE CONTENIDO --- */
 ion-tabs ion-content {
-  --padding-bottom: 110px !important;
+  --padding-bottom: 120px !important;
 }
 
-/* Ocultar barra nativa */
 ion-tab-bar { display: none !important; }
 
-/* --- CONTENEDOR DE REGISTRO (ADMIN-STAFF) --- */
-.main-card {
-  background: #ffffff !important;
-  border-radius: 28px;
-  padding: 30px 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
-  margin-top: 10px;
-
-  .header-section {
-    text-align: center;
-    margin-bottom: 25px;
-
-    .icon-circle {
-      width: 70px;
-      height: 70px;
-      background: #f0f4ff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 15px;
-      
-      ion-icon {
-        font-size: 2rem;
-        color: #3880ff;
-      }
-    }
-
-    h2 {
-      color: #1a1c20 !important; // Título en NEGRO
-      font-weight: 900;
-      font-size: 1.4rem;
-      margin: 0;
-    }
-
-    p {
-      color: #64748b !important; // Subtítulo en GRIS OSCURO
-      font-size: 0.9rem;
-      margin-top: 5px;
-    }
-  }
-}
-
-/* --- AJUSTE DE INPUTS PARA REGISTRO --- */
-.form-list {
-  background: transparent !important;
-  padding: 0;
-
-  .input-item {
-    --background: #f8fafc !important;
-    --border-radius: 14px;
-    border: 1px solid #e2e8f0;
-    margin-bottom: 15px;
-
-    ion-label {
-      color: #475569 !important; // Etiquetas en GRIS fuerte
-      font-weight: 700 !important;
-      font-size: 0.7rem !important;
-      text-transform: uppercase;
-    }
-
-    ion-input, ion-select {
-      --color: #0f172a !important; // Texto que escribes en NEGRO
-      color: #0f172a !important;
-      font-weight: 600;
-    }
-  }
-}
-
-/* BOTÓN FINALIZAR (AZUL) */
-.btn-action {
-  --background: #3880ff !important;
-  --color: #ffffff !important;
-  --border-radius: 16px;
-  height: 56px;
-  font-weight: 800;
-  margin-top: 20px;
-  box-shadow: 0 8px 20px rgba(56, 128, 255, 0.3);
-}
-
-/* --- TARJETA DE AGENDA (ADMIN-HOME) --- */
-.event-card {
-  background: #ffffff !important;
-  border-radius: 24px;
-  margin-bottom: 25px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
-
-  .card-top {
-    padding: 18px 20px;
-    background: #ffffff;
-    border-bottom: 1px solid #f1f5f9;
-    
-    h3 {
-      margin: 0;
-      font-weight: 800;
-      color: #1a1c20 !important; // ESCUELA EN NEGRO
-      text-transform: uppercase;
-      font-size: 1rem;
-    }
-
-    .badge {
-      display: inline-block;
-      margin-top: 6px;
-      background: #3880ff;
-      color: #ffffff;
-      padding: 4px 12px;
-      border-radius: 8px;
-      font-size: 0.65rem;
-      font-weight: 700;
-    }
-  }
-
-  .card-body {
-    padding: 15px;
-    background: #ffffff;
-  }
-}
-
-/* --- BOTÓN ACTUALIZAR EN AGENDA --- */
-.btn-save-group {
-  --background: #3880ff !important;
-  --color: #ffffff !important;
-  --border-radius: 14px;
-  height: 52px;
-  font-weight: 800;
-  margin-top: 15px;
-  box-shadow: 0 6px 16px rgba(56, 128, 255, 0.25);
-}
-
-/* --- SEGMENTOS DE NAVEGACIÓN (CORREGIDO Y CENTRADO) --- */
-.segment-toolbar {
-  --background: #1a1c20 !important;
-  --border-width: 0;
-  padding: 0 15px 15px 15px; // Padding uniforme a los lados
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
-
-  ion-segment {
-    --background: #2d3139 !important;
-    border-radius: 12px;
-    width: 100%; // Ocupa todo el ancho disponible
-    margin: 0 !important; // Elimina márgenes que lo empujan a un lado
-    display: flex;
-
-    ion-segment-button {
-      flex: 1; // Fuerza a que ambos botones midan EXACTAMENTE lo mismo
-      --color: #94a3b8 !important;
-      --color-checked: #ffffff !important;
-      --indicator-color: #3880ff !important;
-      --indicator-height: 100%;
-      --indicator-border-radius: 10px;
-      font-weight: 800;
-      min-height: 45px;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      margin: 0; // Sin separación interna extra
-    }
-  }
+/* Efecto de desvanecimiento suave antes de la barra flotante */
+ion-tabs ion-router-outlet {
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 95%);
+  mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 95%);
 }
