@@ -1,0 +1,148 @@
+/* --- CONFIGURACIÓN DE FONDO --- */
+:host {
+  --gradu-cream: #E3C39D;
+  --gradu-navy: #071739;
+}
+
+.gray-bg {
+  --background: #f4f7f9;
+}
+
+.responsive-container {
+  max-width: 600px; // Más angosto para que el formulario se vea centrado y elegante
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* --- TOOLBAR DARK (IGUAL A TODA LA APP) --- */
+.custom-toolbar {
+  --background: #000000;
+  --color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  ion-title {
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gradu-cream);
+    font-size: 1rem;
+  }
+
+  ion-back-button {
+    --color: var(--gradu-cream);
+  }
+}
+
+/* --- TARJETA DE REGISTRO (ESTILO ISLA DARK) --- */
+.register-card {
+  background: #000000 !important; // Negro sólido
+  border-radius: 30px;
+  padding: 30px 25px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 35px;
+
+    ion-icon {
+      font-size: 4rem;
+      color: var(--gradu-cream); // Icono principal en crema
+      margin-bottom: 15px;
+      filter: drop-shadow(0 0 10px rgba(227, 195, 157, 0.2));
+    }
+
+    h2 {
+      font-weight: 900;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin: 0;
+      letter-spacing: 1px;
+      font-size: 1.4rem;
+    }
+
+    p {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+  }
+}
+
+/* --- FORMULARIO DE INPUTS --- */
+.form-list {
+  background: transparent;
+
+  .input-item {
+    --background: rgba(255, 255, 255, 0.05);
+    --border-radius: 18px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: 0.3s ease;
+
+    &.ion-focused {
+      border: 1px solid var(--gradu-cream);
+    }
+    
+    ion-icon {
+      color: var(--gradu-cream);
+      margin-right: 12px;
+      font-size: 1.3rem;
+    }
+
+    ion-label {
+      color: rgba(255, 255, 255, 0.3) !important;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 1.5px;
+    }
+
+    ion-input {
+      --color: #ffffff;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    // Estilo especial para el selector de ROL
+    ion-select {
+      --placeholder-color: rgba(255, 255, 255, 0.2);
+      --color: #ffffff;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+/* --- BOTÓN DE REGISTRO (ACENTO CREMA) --- */
+.btn-register {
+  --background: var(--gradu-cream);
+  --color: #000000; // Letras negras sobre fondo crema para máximo impacto
+  --border-radius: 20px;
+  height: 60px;
+  margin-top: 25px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 10px 25px rgba(227, 195, 157, 0.2);
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+/* --- TEXTO DE AYUDA INFERIOR --- */
+.footer-note {
+  text-align: center;
+  margin-top: 25px;
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

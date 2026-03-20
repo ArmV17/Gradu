@@ -1,0 +1,71 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-title>Administración</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only" color="danger"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar class="segment-toolbar">
+    <ion-segment value="usuarios" mode="md">
+      <ion-segment-button value="agenda" (click)="navCtrl.navigateBack('/admin-home')">
+        <ion-label>AGENDA</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="usuarios">
+        <ion-label>STAFF</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="gray-bg ion-padding">
+  <div class="responsive-container">
+    
+    <div class="main-card animate__animated animate__fadeInUp">
+      <div class="header-section">
+        <div class="icon-circle">
+          <ion-icon name="person-add-outline"></ion-icon>
+        </div>
+        <h2>Nuevo Registro</h2>
+        <p>Configura el acceso para el personal</p>
+      </div>
+
+      <ion-list lines="none" class="form-list">
+        <ion-item class="input-item">
+          <ion-icon name="id-card-outline" slot="start"></ion-icon>
+          <ion-input label="NÚMERO DE EMPLEADO" labelPlacement="stacked" [(ngModel)]="numEmpleado" placeholder="Ej: 0001"></ion-input>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-icon name="person-outline" slot="start"></ion-icon>
+          <ion-input label="NOMBRE COMPLETO" labelPlacement="stacked" [(ngModel)]="nombreEmpleado" placeholder="Nombre y Apellidos"></ion-input>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-icon name="key-outline" slot="start"></ion-icon>
+          <ion-input label="CONTRASEÑA" labelPlacement="stacked" type="password" [(ngModel)]="password" placeholder="Min. 6 caracteres"></ion-input>
+        </ion-item>
+
+        <ion-item class="input-item assigned-box" lines="none">
+          <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+          <ion-select 
+            label="TIPO DE USUARIO (ROL)" 
+            labelPlacement="stacked" 
+            [(ngModel)]="rolSeleccionado" 
+            interface="popover"
+            placeholder="Selecciona el cargo">
+            <ion-select-option value="empleado">Staff (Empleado)</ion-select-option>
+            <ion-select-option value="admin">Jefe (Administrador)</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+
+      <ion-button expand="block" (click)="registrarEmpleado()" class="btn-action">
+        FINALIZAR REGISTRO
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

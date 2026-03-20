@@ -1,0 +1,86 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="custom-toolbar">
+    <ion-title>Administración</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only" color="danger"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar class="segment-toolbar">
+    <ion-segment value="agenda" mode="md">
+      <ion-segment-button value="agenda">
+        <ion-label>AGENDA</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="staff" (click)="navCtrl.navigateForward('/admin-usuarios')">
+        <ion-label>STAFF</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="gray-bg">
+  <div class="responsive-container ion-padding">
+    
+    <div *ngFor="let g of (eventos$ | async)" class="event-card">
+      
+      <div class="card-top">
+        <h3>{{ g.escuela }}</h3>
+        <span class="badge">{{ g.grado }} - {{ g.turno }}</span>
+      </div>
+
+      <div class="card-body">
+        
+        <ion-item class="input-item" lines="none">
+          <ion-icon name="location-outline" slot="start"></ion-icon>
+          <ion-input 
+            label="LUGAR DEL EVENTO" 
+            labelPlacement="stacked" 
+            [(ngModel)]="g.lugar" 
+            placeholder="Ej: Patio Principal">
+          </ion-input>
+        </ion-item>
+
+        <div class="grid-inputs">
+          <ion-item class="input-item" lines="none">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-input 
+              type="date" 
+              label="FECHA" 
+              labelPlacement="stacked" 
+              [(ngModel)]="g.fechaEvento">
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="input-item" lines="none">
+            <ion-icon name="time-outline" slot="start"></ion-icon>
+            <ion-input 
+              type="time" 
+              label="HORA" 
+              labelPlacement="stacked" 
+              [(ngModel)]="g.horaEvento">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <ion-item class="input-item assigned-box" lines="none">
+          <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+          <ion-input 
+            label="STAFF RESPONSABLE (ID)" 
+            labelPlacement="stacked" 
+            [(ngModel)]="g.asignadoA" 
+            placeholder="Ej: 0001">
+          </ion-input>
+        </ion-item>
+
+        <ion-button expand="block" (click)="guardar(g)" class="btn-save-group">
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          ACTUALIZAR GRUPO
+        </ion-button>
+        
+      </div>
+    </div>
+
+  </div>
+</ion-content>

@@ -11,18 +11,25 @@
   padding-bottom: 120px; 
 }
 
-/* --- TOOLBAR DARK (IGUAL A MEDICIÓN) --- */
+/* --- TOOLBAR DARK (ESTILO GRADU PREMUM) --- */
 .custom-toolbar {
-  --background: #000000;
+  --background: #000000; // Negro absoluto igual a la Isla inferior
   --color: #ffffff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); // Línea sutil de separación
   
   ion-title {
     font-weight: 800;
-    letter-spacing: 3px;
+    letter-spacing: 3px; // Espaciado elegante
     text-transform: uppercase;
-    color: #E3C39D; // Crema Gradu
+    color: #E3C39D; // Color Crema para resaltar la marca
     font-size: 1.1rem;
+    text-align: center;
+  }
+
+  // Estilo para los botones del header (atrás o salir)
+  ion-button {
+    --color: #ffffff;
+    font-weight: 700;
   }
 }
 
