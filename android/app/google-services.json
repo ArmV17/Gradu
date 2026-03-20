@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "438942827009",
+    "firebase_url": "https://gradu-58758-default-rtdb.firebaseio.com",
+    "project_id": "gradu-58758",
+    "storage_bucket": "gradu-58758.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438942827009:android:aa777bf13f783254263600",
+        "android_client_info": {
+          "package_name": "com.estudio.gradu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKN3aH7Qwi86-Y78amy58oqrfFLMiKXAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
