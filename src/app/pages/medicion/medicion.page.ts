@@ -18,6 +18,9 @@ import {
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, switchMap, catchError, debounceTime } from 'rxjs/operators';
 
+// Plugins Físicos (Vibración oficial)
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+
 // Librerías
 import * as XLSX from 'xlsx';
 import * as CryptoJS from 'crypto-js';
@@ -86,13 +89,10 @@ export class MedicionPage implements OnInit {
         profesor: this.decrypt(m['profesor']),
       }))),
       switchMap(medsDescifrados => this.filtroBusqueda$.pipe(
-        debounceTime(300), // Espera 300ms antes de filtrar para no saturar el cel
+        debounceTime(300),
         map(filtro => {
           const texto = filtro.trim().toLowerCase();
-          if (!texto) {
-            // Si no hay búsqueda, mostramos solo los últimos 3 para no llenar la pantalla
-            return medsDescifrados.slice(0, 3);
-          }
+          if (!texto) return medsDescifrados.slice(0, 3);
           return medsDescifrados.filter(m => 
             m.nombreCompleto.toLowerCase().includes(texto) ||
             m.escuela.toLowerCase().includes(texto)
@@ -130,6 +130,7 @@ export class MedicionPage implements OnInit {
       return;
     }
     this.camposBloqueados = !this.camposBloqueados;
+    Haptics.impact({ style: ImpactStyle.Medium });
   }
 
   public buscar(event: any) {
@@ -138,18 +139,17 @@ export class MedicionPage implements OnInit {
 
   async guardarMedicion() {
     if (!this.alumno.nombreCompleto.trim()) {
+      Haptics.notification({ type: NotificationType.Error });
       return this.presentToast('El nombre es obligatorio', 'warning');
     }
     
     const loading = await this.loadingCtrl.create({ 
       message: 'Registrando...',
-      spinner: 'crescent',
       mode: 'ios'
     });
     await loading.present();
 
     try {
-      // Al guardar usamos addDoc, Firebase lo manejará offline si es necesario
       await addDoc(collection(this.firestore, 'medidas'), {
         ...this.alumno,
         nombreCompleto: this.encrypt(this.alumno.nombreCompleto),
@@ -158,14 +158,14 @@ export class MedicionPage implements OnInit {
         fechaRegistro: new Date().getTime()
       });
       
+      Haptics.notification({ type: NotificationType.Success });
       this.presentToast('Alumno registrado con éxito', 'success');
       
-      // Limpiamos campos manteniendo los bloqueados (Escuela, Grado, etc)
       this.alumno.nombreCompleto = '';
       this.alumno.notas = '';
       
     } catch (e) {
-      // Si falla aquí, es por un error de permisos, no por falta de internet
+      Haptics.notification({ type: NotificationType.Error });
       this.presentToast('Error al procesar el registro', 'danger');
     } finally {
       loading.dismiss();
@@ -203,6 +203,7 @@ export class MedicionPage implements OnInit {
             fechaRegistro: new Date().getTime()
           });
         }
+        Haptics.notification({ type: NotificationType.Success });
         this.presentToast(`${json.length} alumnos cargados`, 'success');
       } catch (err) {
         this.presentToast('Archivo Excel no compatible', 'danger');
@@ -217,6 +218,7 @@ export class MedicionPage implements OnInit {
   async eliminar(id: string) {
     try {
       await deleteDoc(doc(this.firestore, `medidas/${id}`));
+      Haptics.impact({ style: ImpactStyle.Heavy });
       this.presentToast('Registro eliminado', 'secondary');
     } catch (e) {
       this.presentToast('No tienes permisos para eliminar', 'danger');
