@@ -30,7 +30,7 @@ import { addIcons } from 'ionicons';
 import { 
   cloudUploadOutline, trashOutline, documentTextOutline, 
   personCircleOutline, searchOutline, lockClosedOutline, 
-  lockOpenOutline, saveOutline, schoolOutline
+  lockOpenOutline, saveOutline, schoolOutline, addOutline
 } from 'ionicons/icons';
 
 import { environment } from 'src/environments/environment';
@@ -55,6 +55,7 @@ export class MedicionPage implements OnInit {
 
   public camposBloqueados: boolean = false;
   
+  // Objeto Alumno para registro continuo
   public alumno = {
     nombreCompleto: '',
     escuela: '',
@@ -73,12 +74,13 @@ export class MedicionPage implements OnInit {
     addIcons({
       cloudUploadOutline, trashOutline, documentTextOutline,
       personCircleOutline, searchOutline, lockClosedOutline,
-      lockOpenOutline, saveOutline, schoolOutline
+      lockOpenOutline, saveOutline, schoolOutline, addOutline
     });
   }
 
   ngOnInit() {
     const ref = collection(this.firestore, 'medidas');
+    // Ordenar por fecha de registro descendente para ver los últimos guardados arriba
     const q = query(ref, orderBy('fechaRegistro', 'desc'));
     
     this.mediciones$ = collectionData(q, { idField: 'id' }).pipe(
@@ -92,7 +94,8 @@ export class MedicionPage implements OnInit {
         debounceTime(300),
         map(filtro => {
           const texto = filtro.trim().toLowerCase();
-          if (!texto) return medsDescifrados.slice(0, 3);
+          // Si no hay búsqueda, mostramos los últimos 5 registros para control visual del staff
+          if (!texto) return medsDescifrados.slice(0, 5);
           return medsDescifrados.filter(m => 
             m.nombreCompleto.toLowerCase().includes(texto) ||
             m.escuela.toLowerCase().includes(texto)
@@ -106,7 +109,7 @@ export class MedicionPage implements OnInit {
     );
   }
 
-  // --- MÉTODOS DE SEGURIDAD ---
+  // --- MÉTODOS DE SEGURIDAD (AES-256) ---
   private encrypt(text: string): string {
     if (!text) return '';
     return CryptoJS.AES.encrypt(text.trim().toUpperCase(), this.secretKey).toString();
@@ -130,6 +133,7 @@ export class MedicionPage implements OnInit {
       return;
     }
     this.camposBloqueados = !this.camposBloqueados;
+    // Respuesta física al bloquear campos
     Haptics.impact({ style: ImpactStyle.Medium });
   }
 
@@ -137,20 +141,18 @@ export class MedicionPage implements OnInit {
     this.filtroBusqueda$.next(event.target.value || '');
   }
 
+  /**
+   * GUARDADO CONTINUO:
+   */
   async guardarMedicion() {
     if (!this.alumno.nombreCompleto.trim()) {
       Haptics.notification({ type: NotificationType.Error });
       return this.presentToast('El nombre es obligatorio', 'warning');
     }
     
-    const loading = await this.loadingCtrl.create({ 
-      message: 'Registrando...',
-      mode: 'ios'
-    });
-    await loading.present();
-
     try {
-      await addDoc(collection(this.firestore, 'medidas'), {
+      // Guardado asíncrono en Firebase (Persistencia Offline automática)
+      addDoc(collection(this.firestore, 'medidas'), {
         ...this.alumno,
         nombreCompleto: this.encrypt(this.alumno.nombreCompleto),
         escuela: this.encrypt(this.alumno.escuela),
@@ -158,8 +160,11 @@ export class MedicionPage implements OnInit {
         fechaRegistro: new Date().getTime()
       });
       
+      // Vibración de éxito inmediata
       Haptics.notification({ type: NotificationType.Success });
-      this.presentToast('Alumno registrado con éxito', 'success');
+      
+      // Toast informativo en la parte superior para no estorbar el teclado
+      this.presentToast(`Registrado: ${this.alumno.nombreCompleto.toUpperCase()}`, 'success');
       
       this.alumno.nombreCompleto = '';
       this.alumno.notas = '';
@@ -167,8 +172,6 @@ export class MedicionPage implements OnInit {
     } catch (e) {
       Haptics.notification({ type: NotificationType.Error });
       this.presentToast('Error al procesar el registro', 'danger');
-    } finally {
-      loading.dismiss();
     }
   }
 
@@ -228,9 +231,9 @@ export class MedicionPage implements OnInit {
   async presentToast(msg: string, color: string) {
     const toast = await this.toastCtrl.create({
       message: msg,
-      duration: 2500,
+      duration: 1500,
       color: color as any,
-      position: 'bottom',
+      position: 'top',
       mode: 'ios'
     });
     toast.present();
